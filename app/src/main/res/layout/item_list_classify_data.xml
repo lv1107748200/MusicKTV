@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.hr.musicktv.widget.layout.RoundFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/x370"
+    app:rfl_radius="@dimen/rfl_radius"
+    android:focusable="true"
+    android:clickable="true"
+    android:id="@+id/classly_layout"
+    >
+    <ImageView
+        android:id="@+id/image"
+        android:scaleType="fitXY"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        />
+
+    <TextView
+        android:duplicateParentState="true"
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textColor="@drawable/foc_tv_two"
+        android:gravity="center"
+        android:textSize="@dimen/sp_22"
+        android:textStyle="bold"
+        />
+
+</com.hr.musicktv.widget.layout.RoundFrameLayout>

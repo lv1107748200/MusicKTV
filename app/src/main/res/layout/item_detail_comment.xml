@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.hr.musicktv.widget.layout.RoundLineLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:focusable="true"
+    android:clickable="true"
+    android:gravity="center"
+    app:rfl_radius="0dp"
+    android:background="@drawable/foc_back_six"
+    >
+
+    <ImageView
+        android:id="@+id/image_tou"
+        android:background="@drawable/hehe"
+        android:layout_gravity="center_vertical"
+        android:layout_width="30dp"
+        android:layout_height="30dp" />
+
+    <TextView
+        android:layout_weight="1"
+        android:duplicateParentState="true"
+        android:id="@+id/title"
+        android:layout_marginLeft="40dp"
+        android:layout_gravity="center_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@drawable/foc_tv_two"
+        android:text="好烂啊"
+        />
+
+    <TextView
+        android:layout_marginLeft="40dp"
+        android:duplicateParentState="true"
+        android:id="@+id/tv_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@drawable/foc_tv_two"
+        android:text="好烂啊"
+        />
+
+</com.hr.musicktv.widget.layout.RoundLineLayout>

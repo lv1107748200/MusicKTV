@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="actionbar_color">#3FBA91</color>
+
+    <color name="titlestrip_background_color">#DEDEDE</color>
+    <color name="titlestrip_text_color">#999999</color>
+
+    <color name="item_border_color">#666666</color>
+    <color name="item_border_color_CC">#CC666666</color>
+    <color name="item_default_color">#EEEEEE</color>
+    <color name="item_pressed_color">#CCCCCC</color>
+    <color name="item_activated_color">#77CEEE</color>
+    <color name="green_99cc00">#99cc00</color>
+    <color name="green_bright">#00FF00</color>
+    <color name="rectangle">#FF9900</color>
+    <color name="windowBackground">#DDDDDD</color>
+
+    <color name="style_color">#618dff</color><!--主题色-->
+    <color name="bottom_container_bg">#99000000</color><!--主题色-->
+    <color name="color_618">#618dff</color>
+
+
+    <color name="c_0D3">#0d3a63</color>
+    <color name="c_990">#99000000</color>
+
+    <color name="c_ttt">#99000000</color>
+    <color name="c_tt">#26000000</color>
+    <color name="c_tttt">#30000000</color>
+    <color name="c_ttttffff">#80FF3E96</color>
+    <color name="c_rectangle">#80FF9900</color>
+    <color name="c_ded">#dedfe1</color>
+    <color name="c_000">#00000000</color>
+    <color name="c_687">#687a90</color>
+    <color name="c_96a">#96a7b9</color>
+    <color name="c_f0f">#f0f0f0</color>
+    <color name="c_008">#0082e9</color>
+    <color name="c_566">#566375</color>
+
+
+    <color name="white">#FFFFFF</color>
+    <color name="c_7c8">#7c8da5</color>
+    <color name="c_0a1">#0a1225</color>
+    <color name="c_082">#082847</color>
+    <color name="c_082c">#082c4d</color>
+    <color name="c_135">#135687</color>
+    <color name="c_1a7">#1a75ad</color>
+    <color name="c_072">#072947</color>
+    <color name="c_5c6">#5c697a</color>
+    <color name="c_284">#284561</color>
+    <color name="c_285">#285c85</color>
+    <color name="c_007">#007fec</color>
+    <color name="c_4a9">#43c088</color>
+
+
+
+</resources>

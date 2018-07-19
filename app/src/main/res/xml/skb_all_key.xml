@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 全键盘
+bg_res="@drawable/main_bg"
+-->
+<Keyboard
+    bg_res="@android:color/transparent"
+    key_left_padding="@dimen/x15"
+    key_bg_res="@drawable/key_bg_rectangle"
+    key_press_res="@drawable/softkey_bg_press2"
+    key_select_res="@drawable/softkey_bg_select2"
+    key_text_color="#b8bbbf"
+    key_text_size="@dimen/x30"
+    key_top_padding="@dimen/x15"
+    key_height="@dimen/x80"
+    key_width="@dimen/x80"
+    start_pos_x="0"
+    start_pos_y="0"
+    left_right_move="false"
+    top_bottom_move="false" >
+
+    <!-- 第一行 -->
+    <row>
+         <!-- 删除 -->
+        <key
+            key_code="@string/keycode_del"
+            key_label="@string/svp_delete"
+            key_width="@dimen/x363"
+            />
+        <!-- 删除  key_left_padding="@dimen/x410"-->
+        <key
+            key_code="@string/keycode_empty"
+            key_label="@string/svp_empty"
+            key_width="@dimen/x272"
+            />
+    </row>
+    
+    <!-- 第二行 -->
+    <row>
+        <keys
+            labels="A|B|C|D|E|F|G"
+            splitter="|" />
+    </row>
+	
+    <!-- 第三行 -->
+    <row>
+        <keys
+            labels="H|I|J|K|L|M|N"
+            splitter="|" />
+    </row>
+    <row>
+        <keys
+            labels="O|P|Q|R|S|T|U"
+            splitter="|" />
+    </row>
+    <!-- 第四行 -->
+    <row>
+        <keys
+            labels="V|W|X|Y|Z|0|1"
+            splitter="|" />
+    </row>
+    <row>
+        <keys
+            labels="2|3|4|5|6|7|8"
+            splitter="|" />
+    </row>
+    <row>
+        <key
+            key_label="9"
+            />
+        <key
+            key_label="0"
+            />
+
+        <key
+            key_code="@string/keycode_full_keyboard"
+            key_label="@string/svp_full_keyboard"
+            key_width="@dimen/x222"
+            />
+        <!-- 删除  key_left_padding="@dimen/x410"-->
+        <key
+            key_code="@string/keycode_T9"
+            key_label="@string/svp_T9"
+            key_width="@dimen/x222"
+            />
+    </row>
+
+    <!--<row>-->
+        <!--&lt;!&ndash;<key&ndash;&gt;-->
+            <!--&lt;!&ndash;key_label="Z" />&ndash;&gt;-->
+        <!--&lt;!&ndash;&lt;!&ndash; 123数字切换 &ndash;&gt;&ndash;&gt;-->
+        <!--&lt;!&ndash;<key&ndash;&gt;-->
+            <!--&lt;!&ndash;key_code="250"&ndash;&gt;-->
+            <!--&lt;!&ndash;key_icon="@drawable/quit_skb" />&ndash;&gt;-->
+         <!--&lt;!&ndash; 删除 &ndash;&gt;-->
+        <!--<key-->
+            <!--key_code="@string/keycode_del"-->
+            <!--key_icon="@drawable/delete" />-->
+    <!--</row>-->
+    
+</Keyboard>

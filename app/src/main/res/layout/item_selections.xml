@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.hr.zhongantv.widget.layout.RoundFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/x200"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/titlestrip_text_color"
+    android:focusable="true"
+    android:clickable="true"
+    app:rfl_radius="5dp">
+
+
+    <TextView
+        android:duplicateParentState="true"
+        android:id="@+id/title"
+        android:padding="@dimen/x20"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        />
+
+
+</com.hr.zhongantv.widget.layout.RoundFrameLayout>

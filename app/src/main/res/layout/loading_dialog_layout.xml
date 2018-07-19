@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/load_layout"
+    android:focusable="false"
+    >
+
+    <LinearLayout
+        android:focusable="false"
+        android:id="@+id/layout_message"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:visibility="gone"
+        >
+
+
+        <TextView
+            android:id="@+id/main_message"
+            android:layout_marginTop="@dimen/x90"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/tv"
+            android:text="周波未开"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/load_lay_one"
+        android:layout_width="@dimen/x240"
+        android:layout_height="@dimen/x240"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:focusable="false"
+        android:layout_gravity="center"
+        >
+        <ProgressBar
+            android:focusable="false"
+            style="@style/InitProgressBar"
+            android:layout_width="@dimen/x80"
+            android:layout_height="@dimen/x80"
+            android:id="@+id/progressBar"
+            />
+
+        <TextView
+            android:layout_marginTop="@dimen/x20"
+            android:id="@+id/tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="正在加载..."
+            style="@style/tv" />
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/load_lay_two"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x240"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:focusable="false"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        >
+
+        <Button
+            android:focusable="true"
+            android:id="@+id/btn_load"
+            android:layout_width="@dimen/x230"
+            android:layout_height="wrap_content"
+            android:text="重新加载"
+            android:textSize="@dimen/sp_17"
+            android:background="@drawable/foc_back_three"
+            android:textColor="@drawable/foc_tv_three"
+            />
+
+
+        <TextView
+            style="@style/tv"
+            android:layout_marginTop="@dimen/x20"
+            android:id="@+id/tv_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="加载失败"
+            />
+
+    </LinearLayout>
+
+
+
+</FrameLayout>

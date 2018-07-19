@@ -1,0 +1,37 @@
+<resources>
+    <item name="tag_view_hold" type="id" />
+    <string name="app_name">KTV</string>
+
+    <string name="svp_search">搜索</string>
+    <string name="svp_list">列表</string>
+    <string name="svp_personal_center">用户中心</string>
+    <string name="svp_recharge_center">充值中心</string>
+    <string name="svp_help_center">帮助中心</string>
+    <string name="svp_about_men">关于我们</string>
+    <string name="svp_favorite">收藏夹</string>
+    <string name="svp_histories">历史纪录</string>
+    <string name="svp_recently_played_videos">播放记录</string>
+    <string name="svp_details">详情</string>
+    <string name="svp_delete">删除</string>
+    <string name="svp_empty">清空</string>
+    <string name="svp_full_keyboard">全键盘</string>
+    <string name="svp_T9">T9键盘</string>
+
+    <string name="svp_play">播放</string>
+    <string name="svp_collect">收藏</string>
+    <string name="svp_like">点赞</string>
+    <string name="svp_stamp">踩</string>
+
+
+    <!-- 键盘自定义按键，这只是DEMO，你可以自定义自己的 -->
+    <string name="keycode_space">62</string> <!-- 空格 -->
+    <string name="keycode_center">66</string> <!-- 回车 -->
+    <string name="keycode_back">4</string> <!-- 返回 -->
+    <string name="keycode_left">21</string> <!-- 左边 -->
+    <string name="keycode_right">22</string> <!-- 右边 -->
+    <string name="keycode_del">67</string> <!-- 删除 -->
+    <string name="keycode_empty">68</string> <!-- 清空 -->
+    <string name="keycode_full_keyboard">69</string> <!-- 删除 -->
+    <string name="keycode_T9">70</string> <!-- 清空 -->
+
+</resources>

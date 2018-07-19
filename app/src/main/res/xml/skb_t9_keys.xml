@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- T9键盘
+    bg_res="@drawable/main_bg"
+-->
+<Keyboard
+    bg_res="@android:color/transparent"
+    key_left_padding="@dimen/x20"
+    key_bg_res="@drawable/key_bg_rectangle"
+    key_press_res="@drawable/softkey_bg_press2"
+    key_select_res="@drawable/softkey_bg_select2"
+    key_text_color="#b8bbbf"
+    key_text_size="@dimen/x30"
+    key_top_padding="@dimen/x20"
+    key_height="@dimen/x100"
+    key_width="@dimen/x200"
+    start_pos_x="0"
+    start_pos_y="0"
+    left_right_move="false"
+    top_bottom_move="false" >
+
+    <!-- 第一行 -->
+    <row>
+        <key
+            key_code="1251"
+            key_icon="@drawable/t9_key1" />
+        <key
+            key_code="1252"
+            key_icon="@drawable/t9_key2" />
+        <key
+            key_code="1253"
+            key_icon="@drawable/t9_key3" />
+    </row>
+
+    <!-- 第二行 -->
+    <row>
+        <key
+            key_code="1254"
+            key_icon="@drawable/t9_key4" />
+        <key
+            key_code="1255"
+            key_icon="@drawable/t9_key5" />
+        <key
+            key_code="1256"
+            key_icon="@drawable/t9_key6" />
+    </row>
+
+    <!-- 第三行 -->
+    <row>
+        <key
+            key_code="1257"
+            key_icon="@drawable/t9_key7" />
+        <key
+            key_code="1258"
+            key_icon="@drawable/t9_key8" />
+        <key
+            key_code="1259"
+            key_icon="@drawable/t9_key9" />
+    </row>
+
+    <!-- 第四行 -->
+    <row>
+        <!-- 删除-->
+        <key
+            key_code="@string/keycode_del"
+            key_label="@string/svp_delete" />
+        <key
+            key_code="1250"
+            key_icon="@drawable/t9_key0" />
+        <!-- 清除-->
+        <key
+            key_code="@string/keycode_empty"
+            key_label="@string/svp_empty"
+            />
+    </row>
+    <row>
+        <key
+            key_code="@string/keycode_full_keyboard"
+            key_label="@string/svp_full_keyboard"
+            />
+        <!-- 删除  key_left_padding="@dimen/x410"-->
+        <key
+            key_code="@string/keycode_T9"
+            key_label="@string/svp_T9"
+            />
+    </row>
+</Keyboard>

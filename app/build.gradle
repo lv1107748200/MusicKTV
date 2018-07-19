@@ -1,0 +1,141 @@
+apply plugin: 'com.android.application'
+apply plugin: 'realm-android'
+android {
+    compileSdkVersion 27
+    defaultConfig {
+        applicationId "com.hr.musicktv"
+        minSdkVersion 19
+        targetSdkVersion 27
+        versionCode 1
+        versionName "1.0"
+
+        multiDexEnabled true
+    }
+
+    packagingOptions {
+        exclude 'META-INF/ASL2.0'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/rxjava.properties'
+    }
+
+    signingConfigs {
+        release {
+            storeFile file('hrandroid.jks')
+            storePassword "hrandroid"
+            keyAlias "hrandroid"
+            keyPassword "hrandroid"
+        }
+        debug {
+            storeFile file('hrandroid.jks')
+            storePassword "hrandroid"
+            keyAlias "hrandroid"
+            keyPassword "hrandroid"
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+
+            applicationVariants.all { variant ->
+                variant.outputs.all { output ->
+                    def outputFile = output.outputFile
+                    if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                        // 输出apk名称为XXXX_v1.0_2016-01-15.apk
+                        def fileName =  "${variant.applicationId}-${variant.buildType.name}-v${variant.versionName}.apk"
+                        outputFileName = fileName
+                    }
+                }
+            }
+        }
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
+
+            applicationVariants.all { variant ->
+                variant.outputs.all { output ->
+                    def outputFile = output.outputFile
+                    if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                        // 输出apk名称为XXXX_v1.0_2016-01-15.apk
+                        def fileName = "${variant.applicationId}-${variant.buildType.name}-v${variant.versionName}.apk"
+                        outputFileName = fileName
+                    }
+                }
+            }
+        }
+    }
+
+    lintOptions {
+        checkReleaseBuilds false
+
+        abortOnError false
+    }
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation externalAndroidAppCompatV7
+    implementation externalAndroidSupportV4
+    implementation externalAndroidConstraintLayout
+    implementation leanbackv17
+    implementation externalAndroidDesign
+    testImplementation externalJunit
+    androidTestImplementation externalAndroidTestRunner
+    androidTestImplementation externalAndroidTestEspressoCore
+    annotationProcessor externalDaggerCompiler
+    implementation externalDagger
+    annotationProcessor externalJakewhartonButterknifeCompiler
+    implementation(externalJakewhartonButterknife) {
+        exclude module: 'support-annotations', group: 'com.android.support'
+        exclude module: 'support-compat', group: 'com.android.support'
+    }
+    // 资源注入
+    implementation externaEventBus
+    //
+    implementation(externalRxjava2Rxandroid) {
+        exclude module: 'rxjava2', group: 'io.reactivex'
+    }
+    implementation externalRxjava2Rxjava
+    implementation externalOKHTTP
+    implementation(externalOKHTTPloggingInterceptor) {
+        exclude module: 'okhttp', group: 'com.squareup.okhttp3'
+    }
+    //restful网络框架
+    implementation(externalRetrofit2) {
+        exclude module: 'okhttp', group: 'com.squareup.okhttp3'
+    }
+    implementation(externalRetrofit2converterJackson) {
+        exclude module: 'retrofit', group: 'com.squareup.retrofit2'
+    }
+    implementation(externalRetrofit2AdapterRxjava) {
+        exclude module: 'retrofit', group: 'com.squareup.retrofit2'
+        exclude module: 'rxjava2', group: 'io.reactivex'
+    }
+    implementation externalAndroidMultiDex
+    implementation(externalGlide) {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+    //Rxjava 生命周期取消订阅
+    implementation(externalRxlifecycle2) {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+
+    api externalFastJsonForAndroid
+
+    implementation project(':tvRecycleview')
+    implementation project(':mylibrary')
+    implementation project(':vlayout')
+
+    implementation 'com.daimajia.easing:library:2.0@aar'
+    implementation 'com.daimajia.androidanimations:library:2.3@aar'
+    //implementation 'org.litepal.android:core:2.0.0'//数据库
+}

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+    <include layout="@layout/layout_title"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/x10"
+        >
+        <com.owen.tvrecyclerview.widget.TvRecyclerView
+            android:layout_gravity="center"
+            android:id="@+id/main_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/x60"
+            app:tv_selectedItemIsCentered="true"
+            android:orientation="horizontal"
+            app:tv_isMenu="true"
+            app:tv_layoutManager="V7LinearLayoutManager"/>
+
+    </FrameLayout>
+
+
+
+    <com.hr.musicktv.widget.view.TvViewPager
+        android:id="@+id/tv_view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </com.hr.musicktv.widget.view.TvViewPager>
+
+
+
+</LinearLayout>

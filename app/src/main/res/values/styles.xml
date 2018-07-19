@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:windowBackground">@drawable/gradient_back</item>
+    </style>
+    <style name="SplashTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowBackground">@drawable/gradient_back</item>
+    </style>
+
+    <style name="popup_hint_anim_one" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/pop_enter_anim_one</item>
+        <item name="android:windowExitAnimation">@anim/pop_exit_anim_one</item>
+    </style>
+    <style name="popup_hint_anim_two" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/pop_enter_anim_two</item>
+        <item name="android:windowExitAnimation">@anim/pop_exit_anim_two</item>
+    </style>
+
+    <style name="TwoWayViewBase">
+
+    </style>
+
+    <style name="dialog" parent="@android:style/Theme.Dialog">
+        //Dialog的windowFrame框为无
+        <item name="android:windowFrame">@null</item>
+        //是否浮现在activity之上
+        <item name="android:windowIsFloating">true</item>
+        //是否半透明
+        <item name="android:windowIsTranslucent">true</item>
+        //是否显示title
+        <item name="android:windowNoTitle">true</item>
+        //设置dialog的背景
+        <item name="android:background">@android:color/transparent</item>
+        //显示区域背景是否透明
+        <item name="android:windowBackground">@android:color/transparent</item>
+        //就是用来控制灰度的值，当为1时，界面除了我们的dialog内容是高亮显示的，dialog以外的区域是黑色的，完全看不到其他内容，系统的默认值是0.5
+        <item name="android:backgroundDimAmount">0.5</item>
+        //显示区域以外是否使用黑色半透明背景
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
+    <style name="oneWayView" parent="TwoWayViewBase">
+        <item name="android:scrollbars">none</item>
+    </style>
+    <style name="TwoWayView" parent="TwoWayViewBase">
+        <item name="android:orientation">horizontal</item>
+        <item name="android:scrollbars">none</item>
+        <item name="android:paddingTop">@dimen/x30</item>
+        <item name="android:paddingLeft">@dimen/x60</item>
+        <item name="android:paddingRight">@dimen/x60</item>
+        <item name="android:paddingBottom">@dimen/x60</item>
+    </style>
+
+    <style name="ThreeWayView" parent="TwoWayViewBase">
+        <item name="android:scrollbars">none</item>
+        <item name="android:paddingTop">@dimen/x40</item>
+        <item name="android:paddingLeft">@dimen/x40</item>
+        <item name="android:paddingRight">@dimen/x40</item>
+        <item name="android:paddingBottom">@dimen/x40</item>
+    </style>
+    <style name="FourWayView" parent="TwoWayViewBase">
+        <item name="android:orientation">horizontal</item>
+        <item name="android:scrollbars">none</item>
+        <item name="android:paddingTop">@dimen/x40</item>
+        <item name="android:paddingLeft">@dimen/x40</item>
+        <item name="android:paddingRight">@dimen/x40</item>
+        <item name="android:paddingBottom">@dimen/x40</item>
+    </style>
+    <style name="TwomuewVideoView" parent="TwoWayViewBase">
+        <item name="android:orientation">horizontal</item>
+        <item name="android:scrollbars">none</item>
+        <item name="android:background">@color/c_990</item>
+    </style>
+
+    <style name="tv">
+        <item name="android:focusable">false</item>
+        <item name="android:textColor">@color/c_f0f</item>
+        <item name="android:textSize">@dimen/sp_22</item>
+    </style>
+
+    <style name="InitProgressBar" parent="@android:style/Widget.ProgressBar.Large">
+        <!-- 最大高度50dp，最小高度10dp，进度值确定，Drawable样式文件引用 -->
+        <item name="android:indeterminate">false</item>
+        <item name="android:indeterminateDrawable">@drawable/init_progressbar</item>
+        <item name="android:indeterminateDuration">1000</item>
+    </style>
+
+    <style name="tv_paster_style">
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+        <item name="android:textSize">@dimen/sp_18</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@drawable/foc_tv_two</item>
+        <item name="android:background">@drawable/foc_back_two</item>
+    </style>
+    <style name="tv_title" parent="tv">
+        <item name="android:textColor">@color/c_96a</item>
+        <item name="android:textSize">@dimen/sp_24</item>
+        <item name="android:layout_marginLeft">@dimen/x60</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="btn_detail">
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/x50</item>
+        <item name="android:layout_margin">@dimen/x10</item>
+        <item name="android:background">@drawable/foc_back_two</item>
+        <item name="android:textColor">@drawable/foc_tv_two</item>
+    </style>
+
+    <style name="round_layout_user_center">
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_margin">@dimen/x20</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@color/c_tttt</item>
+    </style>
+
+    <style name="image_user_center">
+        <item name="android:duplicateParentState">true</item>
+        <item name="android:layout_marginBottom">@dimen/x10</item>
+        <item name="android:layout_width">@dimen/x80</item>
+        <item name="android:layout_height">@dimen/x80</item>
+    </style>
+
+    <style name="tv_user_center">
+        <item name="android:duplicateParentState">true</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@drawable/foc_tv_color_one</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/sp_18</item>
+    </style>
+
+    <style name="tag_flayout_one">
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_margin">@dimen/x40</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+    </style>
+
+    <style name="tag_flayout_two">
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_margin">@dimen/x20</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+    </style>
+
+    <style name="tag_tv_one">
+        <item name="android:duplicateParentState">true</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/x60</item>
+        <item name="android:layout_gravity">bottom</item>
+        <item name="android:textColor">@drawable/foc_tv_two</item>
+        <item name="android:background">@drawable/foc_back_two</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingLeft">@dimen/x10</item>
+    </style>
+
+    <style name="tag_image_one">
+        <item name="android:scaleType">fitXY</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@drawable/hehe</item>
+    </style>
+</resources>

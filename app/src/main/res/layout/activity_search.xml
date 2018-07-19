@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <include layout="@layout/layout_title_child"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        >
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/x70"
+                android:orientation="vertical"
+                android:layout_marginLeft="@dimen/x40"
+                android:layout_marginRight="@dimen/x40"
+                >
+                <TextView
+                    android:layout_weight="1"
+                    android:id="@+id/tv_show_message"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/c_f0f"
+                    android:textSize="@dimen/sp_18"
+                    />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/c_687"
+                    />
+            </LinearLayout>
+
+
+
+            <com.hr.musicktv.widget.keyboard.SkbContainer
+                android:id="@+id/skbContainer"
+                android:layout_width="@dimen/x680"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/x40"
+                android:layout_marginRight="@dimen/x40"
+                android:layout_marginTop="@dimen/x90"
+                >
+            </com.hr.musicktv.widget.keyboard.SkbContainer>
+
+            <!-- 键盘切换测试 -->
+            <LinearLayout
+                android:visibility="gone"
+                android:layout_marginLeft="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:orientation="horizontal" >
+
+                <Button
+                    android:id="@+id/all_key_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="全键盘" />
+
+                <Button
+                    android:id="@+id/t9_key_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="T9键盘" />
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+
+            <com.owen.tvrecyclerview.widget.TvRecyclerView
+                android:layout_weight="1"
+                android:id="@+id/tv_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                style="@style/TwoWayView"
+                android:orientation="vertical"
+                app:spanCount="3"
+                app:tv_layoutManager="V7GridLayoutManager"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+
+
+
+</LinearLayout>
