@@ -33,6 +33,4 @@ public class FunctionMenuAdapter extends CommonRecyclerViewAdapter {
         }
 
     }
-
-
 }

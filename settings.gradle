@@ -1,1 +1,1 @@
-include ':app', ':tvRecycleview', ':mylibrary',':vlayout'
+include ':app', ':tvRecycleview', ':mylibrary'

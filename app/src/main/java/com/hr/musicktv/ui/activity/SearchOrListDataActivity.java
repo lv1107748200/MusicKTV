@@ -21,6 +21,7 @@ import com.hr.musicktv.net.http.HttpCallback;
 import com.hr.musicktv.net.http.HttpException;
 import com.hr.musicktv.ui.adapter.GridAdapter;
 import com.hr.musicktv.ui.adapter.MusicSelectAdapter;
+import com.hr.musicktv.ui.adapter.base.CommonRecyclerViewHolder;
 import com.hr.musicktv.utils.CheckUtil;
 import com.hr.musicktv.utils.DisplayUtils;
 import com.hr.musicktv.utils.NLog;
@@ -182,7 +183,12 @@ public class SearchOrListDataActivity extends BaseActivity implements AffPasWind
 
     private void setListener() {
         tvList.setSpacingWithMargins(DisplayUtils.getDimen(R.dimen.x22), DisplayUtils.getDimen(R.dimen.x22));
-        musicSelectAdapter = new MusicSelectAdapter(this,1);
+        musicSelectAdapter = new MusicSelectAdapter(this,1){
+            @Override
+            public void onBindItemHolder(CommonRecyclerViewHolder helper, Object item, int position) {
+                super.onBindItemHolder(helper, item, position);
+            }
+        };
         tvList.setAdapter(musicSelectAdapter);
 
         tvList.setOnItemListener(new SimpleOnItemListener() {

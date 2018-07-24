@@ -5,48 +5,31 @@ import android.widget.Toast;
 
 import com.hr.musicktv.R;
 import com.hr.musicktv.base.BaseActivity;
-import com.hr.musicktv.common.Iddddd;
-import com.hr.musicktv.db.DBResultCallback;
-import com.hr.musicktv.db.PHData;
-import com.hr.musicktv.db.RealmDBManger;
-import com.hr.musicktv.db.TabsData;
 import com.hr.musicktv.net.base.BaseDataResponse;
 import com.hr.musicktv.net.base.BaseResponse;
 import com.hr.musicktv.net.entry.request.WhatCom;
 import com.hr.musicktv.net.entry.response.Detail;
-import com.hr.musicktv.net.entry.response.GuestSeries;
 import com.hr.musicktv.net.entry.response.UserToken;
 import com.hr.musicktv.net.entry.response.VL;
 import com.hr.musicktv.net.entry.response.VipSeries;
-import com.hr.musicktv.net.entry.response.WhatType;
 import com.hr.musicktv.net.http.HttpCallback;
 import com.hr.musicktv.net.http.HttpException;
 import com.hr.musicktv.utils.CheckUtil;
-import com.hr.musicktv.utils.DisplayUtils;
-import com.hr.musicktv.utils.GlideUtil;
 import com.hr.musicktv.utils.NLog;
 import com.hr.musicktv.utils.NToast;
-import com.hr.musicktv.utils.SpanUtils;
 import com.hr.musicktv.utils.UrlUtils;
 import com.hr.musicktv.widget.dialog.LoadingDialog;
-import com.hr.musicktv.widget.layout.ControlPlayer;
-import com.hr.musicktv.widget.single.CollectManger;
-import com.hr.musicktv.widget.single.IjkPlayerMger;
 import com.hr.musicktv.widget.single.UserInfoManger;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import butterknife.BindView;
-import io.realm.RealmResults;
 
 /**
  * 播放页
  */
-public class PlayerActivity extends BaseActivity {
+public class MusicPlayerActivity extends BaseActivity {
 
     private boolean shortPress = false;
    // private String url = "rtmp://live.hkstv.hk.lxdns.com/live/hks";
@@ -56,9 +39,6 @@ public class PlayerActivity extends BaseActivity {
     private String playId;
     private Detail detail;
 
-
-    @BindView(R.id.ControlPlayer)
-    ControlPlayer controlPlayer;
     @Override
     public int getLayout() {
         return R.layout.activity_player;
@@ -68,56 +48,11 @@ public class PlayerActivity extends BaseActivity {
         super.init();
 
         playId = getIntent().getStringExtra("PLAYID");
-//
-//        if(null != guestSeries){
-//
-//            String s = UrlUtils.getUrl(CollectManger.getInstance().getPlayRecordURL());
-//            String baseUrl = UrlUtils.UrlPage(s);
-//            Map<String,String> stringMap = UrlUtils.URLRequest(s);
-//            stringMap.put("key",);
-//
-//            try {
-//                url = UrlUtils.createLinkStringByGet(baseUrl,stringMap);
-//                NLog.e(NLog.PLAYER," 播放地址 --->" + url);
-//            } catch (UnsupportedEncodingException e) {
-//                e.printStackTrace();
-//            }
-//            controlPlayer.setContext(this);
-//            controlPlayer.setVideoUrl(url);
-//            controlPlayer.initConPlay();//
-//
-//        }else if(null != playId){
-//            huoqv();
-//        }
-
-        if(!CheckUtil.isEmpty(playId)){
-            Play();
-        }
-
 
     }
 
     private void huoqv(){
-        RealmDBManger.getPHData(PHData.class,"ID",playId, new DBResultCallback<RealmResults<PHData>>() {
-            @Override
-            public void onSuccess(RealmResults<PHData> realmResults) {
-                // NLog.e(NLog.DB,"数据库 查询成功------------");
-                if(!CheckUtil.isEmpty(realmResults)){
-//                    NLog.e(NLog.DB,"数据库"+commonLayout.getType()+" --->"+realmResults.size());
-//                    NLog.e(NLog.DB,"数据库"+commonLayout.getType()+" --->"+realmResults.get(0).getRealmList().size());
-                  playId = "";
-                  Play();
 
-                }else {
-
-                }
-            }
-            @Override
-            public void onError(String errString) {
-                // NLog.e(NLog.DB,"数据库 查询失败------------");
-                // NLog.e(NLog.DB,"数据库"+type+" --->"+errString);
-            }
-        });
     }
 
 
@@ -177,14 +112,11 @@ public class PlayerActivity extends BaseActivity {
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
-            controlPlayer.setContext(PlayerActivity.this);
-            controlPlayer.setVideoUrl(url);
-            controlPlayer.initConPlay();//
                     }
 
                 }
             }
-        },PlayerActivity.this.bindUntilEvent(ActivityEvent.DESTROY));
+        },MusicPlayerActivity.this.bindUntilEvent(ActivityEvent.DESTROY));
     }
 
 
@@ -196,10 +128,10 @@ public class PlayerActivity extends BaseActivity {
 
 
                 if(shortPress){
-                    controlPlayer.stopSeepOrBackTask(false);
+
                 }else {
 
-                    controlPlayer.stopSeepOrBackTask(true);
+
 
                 }
 
@@ -209,9 +141,9 @@ public class PlayerActivity extends BaseActivity {
 
             case KeyEvent.KEYCODE_DPAD_RIGHT:  //向右键
                 if(shortPress){
-                    controlPlayer.stopSeepOrBackTask(false);
+
                 }else {
-                    controlPlayer.stopSeepOrBackTask(true);
+
                 }
                 shortPress = false;
 
@@ -231,7 +163,6 @@ public class PlayerActivity extends BaseActivity {
             case KeyEvent.KEYCODE_ENTER:     //确定键enter
             case KeyEvent.KEYCODE_DPAD_CENTER:
 
-                controlPlayer.playOrstopOrRe();//遥控确定键
 
 
                 break;
@@ -240,7 +171,7 @@ public class PlayerActivity extends BaseActivity {
 
                 if(event.getAction()==KeyEvent.ACTION_DOWN){
                     if (System.currentTimeMillis()-firstTime>2000){
-                        Toast.makeText(PlayerActivity.this,"再按一次退出播放器",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MusicPlayerActivity.this,"再按一次退出播放器",Toast.LENGTH_SHORT).show();
                         firstTime=System.currentTimeMillis();
                     }else{
                         finish();
@@ -293,11 +224,11 @@ public class PlayerActivity extends BaseActivity {
                 if(event.getRepeatCount() == 0){
                     event.startTracking();
                     shortPress = true;
-                    controlPlayer.backKey(false,event.getRepeatCount());
+
                 }else {
 
                     shortPress = false;
-                    controlPlayer.backKey(true,event.getRepeatCount());
+
                     return true;
                 }
 
@@ -310,12 +241,12 @@ public class PlayerActivity extends BaseActivity {
 
                     event.startTracking();
                     shortPress = true;
-                    controlPlayer.seepKey(false,event.getRepeatCount());
+
 
                 }else {
 
                     shortPress = false;
-                    controlPlayer.seepKey(true,event.getRepeatCount());
+
                     return true;
 
                 }
@@ -332,19 +263,6 @@ public class PlayerActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
-        if(null != detail){
-            PHData phData = new PHData();
-            phData.setContxt(playId);
-                phData.setTitle(detail.getVL().getTitle());
-                phData.setImgPath(detail.getImgPath());
-            phData.setUrl(controlPlayer.getVideoUrl());
-            phData.setPress(controlPlayer.getJinDu());
-            RealmDBManger.copyToRealmOrUpdate(phData,null);
-        }
-
-        controlPlayer.destroy();
-        IjkPlayerMger.getInstance().setOnDesry();
 
     }
 

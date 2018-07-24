@@ -12,26 +12,12 @@ import android.widget.Toast;
 import com.hr.musicktv.R;
 import com.hr.musicktv.base.BaseActivity;
 import com.hr.musicktv.base.BaseFragment;
-import com.hr.musicktv.common.ImmobilizationData;
 import com.hr.musicktv.db.RealmDBManger;
-import com.hr.musicktv.net.entry.ListData;
-import com.hr.musicktv.ui.adapter.ListDataMenuAdapter;
-import com.hr.musicktv.ui.adapter.MainFragmentAdapter;
 import com.hr.musicktv.ui.adapter.MusicSelectAdapter;
-import com.hr.musicktv.ui.fragment.MultipleFragment;
-import com.hr.musicktv.utils.DisplayUtils;
 import com.hr.musicktv.utils.Formatter;
-import com.hr.musicktv.utils.NLog;
 import com.hr.musicktv.widget.focus.FocusBorder;
 import com.hr.musicktv.widget.single.WhatView;
-import com.hr.musicktv.widget.view.TvViewPager;
-import com.owen.tvrecyclerview.widget.SimpleOnItemListener;
-import com.owen.tvrecyclerview.widget.TvRecyclerView;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
@@ -42,8 +28,6 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
-
-import static android.view.View.GONE;
 /*
 *
 * */

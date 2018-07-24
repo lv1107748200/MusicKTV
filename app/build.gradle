@@ -133,7 +133,7 @@ dependencies {
 
     implementation project(':tvRecycleview')
     implementation project(':mylibrary')
-    implementation project(':vlayout')
+  //implementation project(':vlayout')
 
     implementation 'com.daimajia.easing:library:2.0@aar'
     implementation 'com.daimajia.androidanimations:library:2.3@aar'
