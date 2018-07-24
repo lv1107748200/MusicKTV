@@ -17,8 +17,10 @@ import com.hr.musicktv.db.RealmDBManger;
 import com.hr.musicktv.net.entry.ListData;
 import com.hr.musicktv.ui.adapter.ListDataMenuAdapter;
 import com.hr.musicktv.ui.adapter.MainFragmentAdapter;
+import com.hr.musicktv.ui.adapter.MusicSelectAdapter;
 import com.hr.musicktv.ui.fragment.MultipleFragment;
 import com.hr.musicktv.utils.DisplayUtils;
+import com.hr.musicktv.utils.Formatter;
 import com.hr.musicktv.utils.NLog;
 import com.hr.musicktv.widget.focus.FocusBorder;
 import com.hr.musicktv.widget.single.WhatView;
@@ -48,18 +50,10 @@ import static android.view.View.GONE;
 
 public class MainActivity extends BaseActivity implements BaseFragment.FocusBorderHelper {
 
-    private MainFragmentAdapter mainFragmentAdapter;
-    private List<MultipleFragment> multipleFragments;
-
-    private ListDataMenuAdapter listDataMenuAdapter;
     private Disposable mDisposable;//脉搏
 
     private long firstTime=0;
 
-    @BindView(R.id.tv_view_pager)
-    TvViewPager tvViewPager;
-    @BindView(R.id.main_menu)
-    TvRecyclerView mainMenu;
     @BindView(R.id.image_log)
     ImageView imageLog;
     @BindView(R.id.tv_notification)
@@ -67,21 +61,40 @@ public class MainActivity extends BaseActivity implements BaseFragment.FocusBord
     @BindView(R.id.tv_time)
     TextView tvTime;
 
-    @OnClick({R.id.btn_search,R.id.btn_personal_center})
+    @OnClick({R.id.hit_song_layout,R.id.T_one_layout,R.id.T_two_layout,R.id.T_three_layout,
+            R.id.song_search_layout,R.id.song_classify_layout,R.id.song_have_layout,R.id.song_used_layout})
     public void Onclick(View v){
         Intent intent = new Intent();
         switch (v.getId()) {
-            case R.id.btn_search:
-                intent.setClass(this, SearchActivity.class);
-                startActivity(intent);
-
+            case R.id.hit_song_layout://金曲
+                intent.setClass(MainActivity.this,SearchOrListDataActivity.class);
                 break;
-            case R.id.btn_personal_center:
-                intent.setClass(this, UserCenterActivity.class);
-                startActivity(intent);
-
+            case R.id.T_one_layout://推1
+                intent.setClass(MainActivity.this,SearchOrListDataActivity.class);
                 break;
+            case R.id.T_two_layout://推2
+                intent.setClass(MainActivity.this,SearchOrListDataActivity.class);
+                break;
+            case R.id.T_three_layout://推3
+                intent.setClass(MainActivity.this,SearchOrListDataActivity.class);
+                break;
+            case R.id.song_search_layout:
+                intent.setClass(MainActivity.this,SearchOrListDataActivity.class);
+                break;
+            case R.id.song_classify_layout:
+                intent.setClass(MainActivity.this,ClassifyListDataActicity.class);
+                break;
+            case R.id.song_have_layout://已点
+                intent.setClass(MainActivity.this,MusicListActivity.class);
+                intent.putExtra("TYPE",MusicSelectAdapter.SELSONG);
+                break;
+            case R.id.song_used_layout://已唱
+                intent.setClass(MainActivity.this,MusicListActivity.class);
+                intent.putExtra("TYPE",MusicSelectAdapter.USEDSONG);
+                break;
+
         }
+        startActivity(intent);
     }
 
     @Override
@@ -93,77 +106,26 @@ public class MainActivity extends BaseActivity implements BaseFragment.FocusBord
     public void init() {
         super.init();
         setListener();
-        listDataMenuAdapter = new ListDataMenuAdapter(this,ListDataMenuAdapter.ONE);
-        mainMenu.setSpacingWithMargins(DisplayUtils.getDimen(R.dimen.x10), DisplayUtils.getDimen(R.dimen.x30));
-        mainMenu.setAdapter(listDataMenuAdapter);
-
-        mainFragmentAdapter = new MainFragmentAdapter(getSupportFragmentManager());
-        tvViewPager.setOffscreenPageLimit(2);
-        tvViewPager.setScrollerDuration(200);
-        tvViewPager.setAdapter(mainFragmentAdapter);
-        multipleFragments = new ArrayList<>();
-
         initData();
-
         getTimesPosable();
     }
     private void setListener() {
-
         mFocusBorder.boundGlobalFocusListener(new FocusBorder.OnFocusCallback() {
             @Override
             public FocusBorder.Options onFocus(View oldFocus, View newFocus) {
                 if(null != newFocus){
-                    if(newFocus.getId() == R.id.tag_flayout_one || newFocus.getId() == R.id.tag_flayout_two){
-                        return FocusBorder.OptionsFactory.get(1.05f, 1.05f, 0);
+                    switch (newFocus.getId()){
+                        case R.id.hit_song_layout:
+                            return FocusBorder.OptionsFactory.get(1.1f, 1.05f, 0);
                     }
                 }
                 return FocusBorder.OptionsFactory.get(1.1f, 1.1f, 0); //返回null表示不使用焦点框框架
             }
         });
-
-        mainMenu.setOnItemListener(new SimpleOnItemListener() {
-
-            @Override
-            public void onItemSelected(TvRecyclerView parent, View itemView, int position) {
-                onMoveFocusBorder(itemView, 1.0f, DisplayUtils.dip2px(3));
-                if(position == tvViewPager.getCurrentItem()){
-
-                }else {
-                    tvViewPager.setCurrentItem(position);
-                }
-            }
-
-            @Override
-            public void onItemClick(TvRecyclerView parent, View itemView, int position) {
-
-            }
-        });
-
-        mainMenu.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-
-              //  mFocusBorder.setVisible(hasFocus);
-
-            }
-        });
-
     }
 
     private void initData(){
-        List<ListData> listData = new ArrayList<>();
 
-        for (int i =0 ;i< 8; i++){
-            ListData listData1 = new ListData(
-                    i,
-                    ImmobilizationData.Tags.getNameByIndex(i),
-                    ImmobilizationData.Tags.getColorByIndex(i)
-            );
-            listData.add(listData1);
-            multipleFragments.add(MultipleFragment.getmultipleFragment().setType(listData1));
-        }
-        listDataMenuAdapter.repaceDatas(listData);
-        mainFragmentAdapter.upData(multipleFragments);
     }
 
     @Override
@@ -230,7 +192,7 @@ public class MainActivity extends BaseActivity implements BaseFragment.FocusBord
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(@NonNull Long aLong) throws Exception {
-                        tvTime.setText(getTime());
+                        tvTime.setText(Formatter.getTime());
                     }
                 });
 
@@ -241,46 +203,4 @@ public class MainActivity extends BaseActivity implements BaseFragment.FocusBord
             mDisposable = null;
         }
     }
-
-    //获得当前年月日时分秒星期 
-    public String getTime(){
-            final Calendar c = Calendar.getInstance();
-            c.setTimeZone(TimeZone.getTimeZone("GMT+8:00"));
-            String mYear = String.valueOf(c.get(Calendar.YEAR)); // 获取当前年份 
-             String mMonth = String.valueOf(c.get(Calendar.MONTH) + 1);// 获取当前月份 
-            String mDay = String.valueOf(c.get(Calendar.DAY_OF_MONTH));// 获取当前月份的日期号码 
-            String mWay = String.valueOf(c.get(Calendar.DAY_OF_WEEK));
-            String mHour = String.valueOf(c.get(Calendar.HOUR_OF_DAY));//时 
-            String mMinute = String.valueOf(c.get(Calendar.MINUTE));//分 
-            String mSecond = String.valueOf(c.get(Calendar.SECOND));//秒 
-
-            if(mSecond.length() == 1){
-                mSecond = "0"+mSecond;
-            }
-            if(mMinute.length() == 1){
-                mMinute = "0"+mMinute;
-            }
-            if(mHour.length() == 1){
-                mHour = "0"+mHour;
-            }
-            if("1".equals(mWay)){
-            mWay ="日";
-            }else if("2".equals(mWay)){
-            mWay ="一";
-            }else if("3".equals(mWay)){
-            mWay ="二";
-            }else if("4".equals(mWay)){
-            mWay ="三";
-            }else if("5".equals(mWay)){
-            mWay ="四";
-            }else if("6".equals(mWay)){
-            mWay ="五";
-            }else if("7".equals(mWay)) {
-                mWay = "六";
-            }
-     return mYear + "年" + mMonth + "月" + mDay+"日"+" "+"星期"+mWay+"\n"+mHour+":"+mMinute+":"+mSecond;
-   }
-
-
-
 }

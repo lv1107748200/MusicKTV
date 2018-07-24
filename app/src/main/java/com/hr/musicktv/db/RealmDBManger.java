@@ -148,6 +148,9 @@ public class RealmDBManger {
 
 
     public static void closed(){
+        if(getRealmSingle().getMyRealm().isClosed()){
+            return;
+        }
         getRealmSingle().getMyRealm().removeAllChangeListeners();
         getRealmSingle().getMyRealm().close();
     }

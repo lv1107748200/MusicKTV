@@ -24,8 +24,8 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:banner="@mipmap/ic_launcher"
+        android:icon="@drawable/ktv"
+        android:banner="@drawable/ktv"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
@@ -46,11 +46,13 @@
 
         <activity android:name=".ui.activity.MainActivity"/>//主页
         <activity android:name=".ui.activity.ListDataActivity"/>//视频列表
-        <activity android:name=".ui.activity.SearchActivity"/>//搜索
+        <activity android:name=".ui.activity.SearchOrListDataActivity"/>//搜索
         <activity android:name=".ui.activity.DetailActivity"/>//详情页
         <activity android:name=".ui.activity.UserCenterActivity"/>//个人中心
         <activity android:name=".ui.activity.DiversityActivity"/>//个人中心
         <activity android:name=".ui.activity.PlayerActivity"/>//播放页
+        <activity android:name=".ui.activity.ClassifyListDataActicity"/>//分类搜索
+        <activity android:name=".ui.activity.MusicListActivity"/>//歌曲列表
 
     </application>
 

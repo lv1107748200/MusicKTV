@@ -22,6 +22,16 @@
     <string name="svp_like">点赞</string>
     <string name="svp_stamp">踩</string>
 
+    <string name="mk_hit_song">金曲榜</string>
+
+    <string name="mk_song">演唱</string>
+    <string name="mk_stick">置顶</string>
+    <string name="mk_up">上移</string>
+    <string name="mk_down">下移</string>
+    <string name="mk_del">删除</string>
+    <string name="mk_sel">点歌</string>
+
+
 
     <!-- 键盘自定义按键，这只是DEMO，你可以自定义自己的 -->
     <string name="keycode_space">62</string> <!-- 空格 -->

@@ -1,8 +1,9 @@
 package com.hr.musicktv.net.entry;
 
+import com.hr.musicktv.common.BaseMusicData;
 import com.hr.musicktv.common.ImmobilizationData;
 
-public class ListData {
+public class ListData extends BaseMusicData {
 
     private int type = 1;
 

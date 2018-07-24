@@ -8,31 +8,177 @@
     >
     <include layout="@layout/layout_title"/>
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/x10"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
         >
-        <com.owen.tvrecyclerview.widget.TvRecyclerView
-            android:layout_gravity="center"
-            android:id="@+id/main_menu"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/x60"
-            app:tv_selectedItemIsCentered="true"
-            android:orientation="horizontal"
-            app:tv_isMenu="true"
-            app:tv_layoutManager="V7LinearLayoutManager"/>
+        <com.hr.musicktv.widget.layout.RoundFrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:focusable="true"
+            app:rfl_radius="@dimen/rfl_radius"
+            android:id="@+id/hit_song_layout"
+            android:layout_weight="1.5"
+            android:layout_marginLeft="@dimen/x40"
+            android:layout_marginTop="@dimen/x40"
+            android:layout_marginBottom="@dimen/x40"
+            android:layout_marginRight="@dimen/x20"
+            >
 
-    </FrameLayout>
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:background="@drawable/hehe"
+                />
+            <TextView
+                android:duplicateParentState="true"
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@drawable/foc_tv_color_one"
+                android:layout_gravity="center"
+                android:textSize="@dimen/sp_22"
+                android:textStyle="bold"
+                android:text="@string/mk_hit_song"
+                />
+
+        </com.hr.musicktv.widget.layout.RoundFrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="0.5"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_weight="1"
+                android:paddingRight="@dimen/x20"
+                >
+                <com.hr.musicktv.widget.layout.RoundFrameLayout
+                    app:rfl_radius="@dimen/rfl_radius"
+                    android:id="@+id/T_one_layout"
+                    style="@style/layout_home">
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/t_one_image"
+                        android:background="@drawable/hehe"
+                        />
+
+                </com.hr.musicktv.widget.layout.RoundFrameLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    >
+                    <com.hr.musicktv.widget.layout.RoundFrameLayout
+                        style="@style/layout_home"
+                        android:layout_marginBottom="@dimen/x20"
+                        app:rfl_radius="@dimen/rfl_radius"
+                        android:id="@+id/T_two_layout"
+                        >
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:id="@+id/t_two_image"
+                            android:background="@drawable/hehe"
+                            />
+
+                    </com.hr.musicktv.widget.layout.RoundFrameLayout>
+
+                    <com.hr.musicktv.widget.layout.RoundFrameLayout
+                        style="@style/layout_home"
+                        android:layout_marginTop="@dimen/x20"
+                        app:rfl_radius="@dimen/rfl_radius"
+                        android:id="@+id/T_three_layout"
+                        >
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:id="@+id/t_three_image"
+                            android:background="@drawable/hehe"
+                            />
+
+                    </com.hr.musicktv.widget.layout.RoundFrameLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
 
 
 
-    <com.hr.musicktv.widget.view.TvViewPager
-        android:id="@+id/tv_view_pager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </com.hr.musicktv.widget.view.TvViewPager>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_weight="1.2"
+                android:paddingRight="@dimen/x20"
+                >
+                <com.hr.musicktv.widget.layout.RoundFrameLayout
+                    style="@style/layout_home_one"
+                    app:rfl_radius="@dimen/rfl_radius"
+                    android:id="@+id/song_search_layout"
+                    >
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/song_search_image"
+                        android:background="@drawable/ic_search_song"
+                        />
+                </com.hr.musicktv.widget.layout.RoundFrameLayout>
+                <com.hr.musicktv.widget.layout.RoundFrameLayout
+                    style="@style/layout_home_one"
+                    app:rfl_radius="@dimen/rfl_radius"
+                    android:id="@+id/song_classify_layout"
+                    >
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/song_classify_image"
+                        android:background="@drawable/ic_classify_song"
+                        />
+                </com.hr.musicktv.widget.layout.RoundFrameLayout>
+                <com.hr.musicktv.widget.layout.RoundFrameLayout
+                    style="@style/layout_home_one"
+                    app:rfl_radius="@dimen/rfl_radius"
+                    android:id="@+id/song_have_layout"
+                    >
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/song_have_image"
+                        android:background="@drawable/ic_have_song"
+                        />
+                </com.hr.musicktv.widget.layout.RoundFrameLayout>
+                <com.hr.musicktv.widget.layout.RoundFrameLayout
+                    style="@style/layout_home_one"
+                    app:rfl_radius="@dimen/rfl_radius"
+                    android:id="@+id/song_used_layout"
+                    >
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/song_used_image"
+                        android:background="@drawable/ic_used_song"
+                        />
+                </com.hr.musicktv.widget.layout.RoundFrameLayout>
+
+
+            </LinearLayout>
 
 
 
+        </LinearLayout>
+
+
+
+    </LinearLayout>
 </LinearLayout>

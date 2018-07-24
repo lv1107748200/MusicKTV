@@ -41,19 +41,22 @@ public class SplashActiity extends BaseActivity implements LoadingLayout.Loading
     public void init() {
         super.init();
 
-        load_relayout.setLoadingCallBack(this);
+        //load_relayout.setLoadingCallBack(this);
         //userAutoLogin();
 
         if(CheckUtil.isEmpty(UserInfoManger.getInstance().getUserToken())){
-            load_relayout.setLoadingLayout(LoadingLayout.ONE,null);
-            userAutoLogin();
+           // load_relayout.setLoadingLayout(LoadingLayout.ONE,null);
+
         }else {
             Intent intent = new Intent();
             intent.setClass(SplashActiity.this,MainActivity.class);
             startActivity(intent);
             finish();
         }
-
+        Intent intent = new Intent();
+        intent.setClass(SplashActiity.this,MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private void userAutoLogin(){

@@ -2,11 +2,10 @@ package com.hr.musicktv.ui.activity;
 
 import android.content.Intent;
 import android.graphics.RectF;
-import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.hr.musicktv.R;
 import com.hr.musicktv.base.BaseActivity;
@@ -15,14 +14,13 @@ import com.hr.musicktv.net.base.BaseDataResponse;
 import com.hr.musicktv.net.base.BaseResponse;
 import com.hr.musicktv.net.entry.ListData;
 import com.hr.musicktv.net.entry.request.WhatCom;
-import com.hr.musicktv.net.entry.response.Result;
 import com.hr.musicktv.net.entry.response.SearchList;
 import com.hr.musicktv.net.entry.response.UserToken;
 import com.hr.musicktv.net.entry.response.WhatList;
 import com.hr.musicktv.net.http.HttpCallback;
 import com.hr.musicktv.net.http.HttpException;
 import com.hr.musicktv.ui.adapter.GridAdapter;
-import com.hr.musicktv.ui.fragment.MultipleFragment;
+import com.hr.musicktv.ui.adapter.MusicSelectAdapter;
 import com.hr.musicktv.utils.CheckUtil;
 import com.hr.musicktv.utils.DisplayUtils;
 import com.hr.musicktv.utils.NLog;
@@ -41,17 +39,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 
 /**
  * 搜索页面
  */
-public class SearchActivity extends BaseActivity implements AffPasWindow.AffPasWindowCallBack {
+public class SearchOrListDataActivity extends BaseActivity implements AffPasWindow.AffPasWindowCallBack {
 
     public static int pp = 0;
 
     @BindView(R.id.tv_show_message)
-    TextView tv_show_message;
+    EditText tv_show_message;
     @BindView(R.id.tv_title_child)
     TextView tvTitleChild;
     @BindView(R.id.skbContainer)
@@ -60,8 +57,9 @@ public class SearchActivity extends BaseActivity implements AffPasWindow.AffPasW
     TvRecyclerView tvList;
 
     private String type;
-    private GridAdapter gridAdapter;
     private AffPasWindow affPasWindow;
+    private MusicSelectAdapter musicSelectAdapter;
+
     private StringBuffer stringBuffer;//搜索字符
 
     private boolean isMore = true;
@@ -129,26 +127,6 @@ public class SearchActivity extends BaseActivity implements AffPasWindow.AffPasW
 
                             String keyLabel = softKey.getKeyLabel();
                             addOrRemove(keyLabel,0);
-
-//                    int keyCode = softKey.getKeyCode();
-//                    String keyLabel = softKey.getKeyLabel();
-//                    if (!TextUtils.isEmpty(keyLabel)) { // 输入文字.
-//
-//                    } else { // 自定义按键，这些都是你自己在XML中设置的keycode.
-//                        keyCode = softKey.getKeyCode();
-//                        if (keyCode == KeyEvent.KEYCODE_DEL) {
-//
-//
-//                        } else if (keyCode == KeyEvent.KEYCODE_BACK) {
-//                            finish();
-//                        } else if (keyCode == 66) {
-//                            Toast.makeText(getApplicationContext(), "回车", Toast.LENGTH_LONG).show();
-//                        } else if (keyCode == 250) { //切换键盘
-//                            // 这里只是测试，你可以写自己其它的数字键盘或者其它键盘
-//                            setSkbContainerOther();
-//                            skbContainer.setSkbLayout(R.xml.sbd_number);
-//                        }
-//                    }
                         }
                         break;
                 }
@@ -185,27 +163,27 @@ public class SearchActivity extends BaseActivity implements AffPasWindow.AffPasW
 
 
         setListener();
-        tvList.setSpacingWithMargins(DisplayUtils.getDimen(R.dimen.x22), DisplayUtils.getDimen(R.dimen.x22));
-        gridAdapter = new GridAdapter(this);
-        tvList.setAdapter(gridAdapter);
+
 
         initData();
 
-        load(Tags);
+       // load(Tags);
     }
 
     private void initData(){
         List<ListData> listData = new ArrayList<>();
 
         for (int i =0 ;i< 37; i++){
-            listData.add(new ListData());
+            listData.add(new ListData(""+i));
         }
 
-        gridAdapter.repaceDatas(listData);
+        musicSelectAdapter.repaceDatas(listData);
     }
 
     private void setListener() {
-
+        tvList.setSpacingWithMargins(DisplayUtils.getDimen(R.dimen.x22), DisplayUtils.getDimen(R.dimen.x22));
+        musicSelectAdapter = new MusicSelectAdapter(this,1);
+        tvList.setAdapter(musicSelectAdapter);
 
         tvList.setOnItemListener(new SimpleOnItemListener() {
 
@@ -216,13 +194,7 @@ public class SearchActivity extends BaseActivity implements AffPasWindow.AffPasW
 
             @Override
             public void onItemClick(TvRecyclerView parent, View itemView, int position) {
-                Object o =  gridAdapter.getItem(position);
 
-                if(o instanceof WhatList){
-                    Intent intent = new Intent(SearchActivity.this,DetailActivity.class);
-                    intent.putExtra("Iddddd",new Iddddd(((WhatList) o).getID(),((WhatList) o).getContxt()));
-                    startActivity(intent);
-                }
 
             }
         });
@@ -250,7 +222,7 @@ public class SearchActivity extends BaseActivity implements AffPasWindow.AffPasW
 
                 tvList.setLoadingMore(true); //正在加载数据
                 isLoadMore = true;
-                load(Tags);
+              //  load(Tags);
                 return isMore; //是否还有更多数据
             }
         });
@@ -303,7 +275,7 @@ public class SearchActivity extends BaseActivity implements AffPasWindow.AffPasW
                 setTvList(whatLists);
 
             }
-        },SearchActivity.this.bindUntilEvent(ActivityEvent.STOP));
+        },SearchOrListDataActivity.this.bindUntilEvent(ActivityEvent.STOP));
     }
 
     private void setTvList(List<WhatList>  whatLists){
@@ -315,17 +287,17 @@ public class SearchActivity extends BaseActivity implements AffPasWindow.AffPasW
 
             pageNo = pageNo+1;
             if(isLoadMore){
-                gridAdapter.appendDatas(whatLists);
+                musicSelectAdapter.appendDatas(whatLists);
             }else {
-                gridAdapter.repaceDatas(whatLists);
+                musicSelectAdapter.repaceDatas(whatLists);
             }
         }else {
             if(isLoadMore){
                 isMore = false;
 
             }else {
-                gridAdapter.clearDatas();
-                gridAdapter.notifyDataSetChanged();
+                musicSelectAdapter.clearDatas();
+                musicSelectAdapter.notifyDataSetChanged();
 
             }
 
@@ -349,7 +321,7 @@ public class SearchActivity extends BaseActivity implements AffPasWindow.AffPasW
                    // NLog.e(NLog.KEY,"获取view 坐标  l,t :  "+softKey.getLeft()+","+softKey.getTop());
 
                     int x  = (int) (softKey.getLeft() + skbContainer.getX());
-                    int y = (int) (softKey.getTop() + skbContainer.getY());
+                    int y = (int) (softKey.getTop() + skbContainer.getY() + DisplayUtils.getStatusBarHeight(this));
 
                    // NLog.e(NLog.KEY,"移动view 坐标  x,y :  "+x+","+y);
 

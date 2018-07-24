@@ -8,12 +8,11 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.hr.musicktv.R;
-import com.hr.musicktv.ui.activity.SearchActivity;
+import com.hr.musicktv.ui.activity.SearchOrListDataActivity;
 import com.hr.musicktv.utils.DisplayUtils;
 
 import butterknife.BindView;
@@ -62,8 +61,8 @@ public class AffPasWindow implements View.OnKeyListener {
 
         windowManager = (WindowManager)context.getSystemService(Context.WINDOW_SERVICE);
         params = new WindowManager.LayoutParams();
-        params.height = DisplayUtils.getDimen(R.dimen.x200) + SearchActivity.pp*2;
-        params.width = DisplayUtils.getDimen(R.dimen.x200)+ SearchActivity.pp*2;
+        params.height = DisplayUtils.getDimen(R.dimen.x200) + SearchOrListDataActivity.pp*2;
+        params.width = DisplayUtils.getDimen(R.dimen.x200)+ SearchOrListDataActivity.pp*2;
         params.format = PixelFormat.TRANSLUCENT;
         params.type = WindowManager.LayoutParams.TYPE_APPLICATION_PANEL;
         params.flags =

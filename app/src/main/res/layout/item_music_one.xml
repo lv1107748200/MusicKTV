@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/x80"
+    android:background="@color/c_96a80"
+    >
+    <TextView
+        android:duplicateParentState="true"
+        android:id="@+id/title_grid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textColor="@color/c_f0f"
+        android:gravity="left|center"
+        android:textSize="@dimen/sp_18"
+        android:textStyle="bold"
+        android:layout_weight="1"
+        android:paddingLeft="@dimen/x20"
+        />
+
+    <Button
+        android:id="@+id/btn_song"
+        android:text="@string/mk_song"
+        style="@style/music_btn_one" />
+    <Button
+        android:id="@+id/btn_stick"
+        android:text="@string/mk_stick"
+        style="@style/music_btn_one"
+        />
+    <Button
+        android:id="@+id/btn_up"
+        android:text="@string/mk_up"
+        style="@style/music_btn_one" />
+    <Button
+        android:id="@+id/btn_down"
+        android:text="@string/mk_down"
+        style="@style/music_btn_one"
+        />
+    <Button
+        android:id="@+id/btn_del"
+        android:text="@string/mk_del"
+        style="@style/music_btn_one" />
+    <Button
+        android:id="@+id/btn_sel"
+        android:text="@string/mk_sel"
+        style="@style/music_btn_one"
+        />
+</LinearLayout>
+
+

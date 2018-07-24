@@ -10,15 +10,12 @@
         android:id="@+id/image_log"
         android:layout_width="150dp"
         android:layout_height="@dimen/x100"
-        android:background="@drawable/tv"
-        android:scaleType="fitXY"
-        android:layout_marginLeft="@dimen/x20"
-        android:layout_marginRight="@dimen/x20"
+        android:src="@drawable/ktv_log"
         />
     <com.hr.musicktv.widget.view.MarqueeText
         android:focusable="false"
         android:id="@+id/tv_notification"
-        android:layout_weight="1"
+        android:layout_weight="0.9"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -28,31 +25,16 @@
         android:marqueeRepeatLimit="marquee_forever"
         android:scrollHorizontally="true"
         android:textColor="@color/c_f0f"
+        android:textSize="@dimen/sp_18"
         />
-
-    <ImageButton
-        android:layout_marginLeft="@dimen/x40"
-        android:layout_marginRight="@dimen/x20"
-        android:id="@+id/btn_search"
-        android:layout_width="@dimen/x50"
-        android:layout_height="@dimen/x50"
-        android:background="@drawable/foc_image_one"
-        />
-    <ImageButton
-        android:layout_marginLeft="@dimen/x20"
-        android:id="@+id/btn_personal_center"
-        android:layout_width="@dimen/x50"
-        android:layout_height="@dimen/x50"
-        android:background="@drawable/foc_image_two"
-        />
-
     <TextView
         android:focusable="false"
         android:id="@+id/tv_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:layout_weight="1.5"
+        android:layout_weight="1.7"
         android:textColor="@color/c_96a"
+        android:textSize="@dimen/sp_18"
         />
 </LinearLayout>

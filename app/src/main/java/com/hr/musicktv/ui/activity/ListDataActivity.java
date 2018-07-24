@@ -1,12 +1,9 @@
 package com.hr.musicktv.ui.activity;
 
-import android.app.ListActivity;
 import android.content.Intent;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
-import com.google.android.exoplayer2.C;
 import com.hr.musicktv.R;
 import com.hr.musicktv.base.BaseActivity;
 import com.hr.musicktv.common.Iddddd;
@@ -16,7 +13,6 @@ import com.hr.musicktv.db.RealmDBManger;
 import com.hr.musicktv.db.TabsData;
 import com.hr.musicktv.net.base.BaseDataResponse;
 import com.hr.musicktv.net.base.BaseResponse;
-import com.hr.musicktv.net.entry.ListData;
 import com.hr.musicktv.net.entry.request.WhatCom;
 import com.hr.musicktv.net.entry.response.UserToken;
 import com.hr.musicktv.net.entry.response.WhatList;
@@ -25,31 +21,20 @@ import com.hr.musicktv.net.http.HttpCallback;
 import com.hr.musicktv.net.http.HttpException;
 import com.hr.musicktv.ui.adapter.GridAdapter;
 import com.hr.musicktv.ui.adapter.ListDataMenuAdapter;
-import com.hr.musicktv.ui.fragment.MultipleFragment;
 import com.hr.musicktv.utils.CheckUtil;
 import com.hr.musicktv.utils.DisplayUtils;
-import com.hr.musicktv.utils.NLog;
 import com.hr.musicktv.widget.dialog.LoadingDialog;
 import com.hr.musicktv.widget.single.UserInfoManger;
 import com.owen.tvrecyclerview.widget.SimpleOnItemListener;
 import com.owen.tvrecyclerview.widget.TvRecyclerView;
 import com.trello.rxlifecycle2.android.ActivityEvent;
-import com.trello.rxlifecycle2.android.FragmentEvent;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 import io.realm.RealmList;
 import io.realm.RealmResults;
-
-import static com.hr.musicktv.common.ImmobilizationData.ANIME;
-import static com.hr.musicktv.common.ImmobilizationData.FILM;
-import static com.hr.musicktv.common.ImmobilizationData.OVERSEAS;
-import static com.hr.musicktv.common.ImmobilizationData.SPORTS;
-import static com.hr.musicktv.common.ImmobilizationData.TELEPLAY;
-import static com.hr.musicktv.common.ImmobilizationData.VARIETY;
 
 
 /**
@@ -198,7 +183,7 @@ public class ListDataActivity extends BaseActivity {
 
                 if(position == 0){
                  Intent intent = new Intent();
-                 intent.setClass(ListDataActivity.this, SearchActivity.class);
+                 intent.setClass(ListDataActivity.this, SearchOrListDataActivity.class);
                  intent.putExtra("TYPE",type);
                  startActivity(intent);
                 }
