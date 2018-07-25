@@ -2,18 +2,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/x60"
+    android:layout_height="@dimen/x70"
     android:focusable="true"
     android:clickable="true"
-    android:background="@drawable/selector_item_background">
+    android:background="@drawable/foc_back_two">
 
     <TextView
         android:duplicateParentState="true"
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:textColor="@android:color/holo_green_dark"
-        android:gravity="center"
-        android:textStyle="bold"/>
+        android:textColor="@color/c_f0f"
+        android:gravity="center_vertical"
+        android:textStyle="bold"
+        android:textSize="@dimen/sp_18"
+        />
 
 </LinearLayout>

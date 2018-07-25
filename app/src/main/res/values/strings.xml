@@ -31,6 +31,15 @@
     <string name="mk_del">删除</string>
     <string name="mk_sel">点歌</string>
 
+    <string name="mk_pause">暂停</string>
+    <string name="mk_rebroadcast">重播</string>
+    <string name="mk_next_song">切歌</string>
+    <string name="mk_original_singer">原唱</string>
+    <string name="mk_accompany">伴唱</string>
+    <string name="mk_up_tune">升调</string>
+    <string name="mk_down_tune">降调</string>
+    <string name="mk_song_list">歌单</string>
+
 
 
     <!-- 键盘自定义按键，这只是DEMO，你可以自定义自己的 -->

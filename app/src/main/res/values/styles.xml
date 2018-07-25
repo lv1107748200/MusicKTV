@@ -68,6 +68,16 @@
         <item name="android:paddingRight">@dimen/x40</item>
         <item name="android:paddingBottom">@dimen/x40</item>
     </style>
+
+    <style name="FiveWayView" parent="TwoWayViewBase">
+        <item name="android:orientation">horizontal</item>
+        <item name="android:scrollbars">none</item>
+        <item name="android:paddingTop">@dimen/x20</item>
+        <item name="android:paddingLeft">@dimen/x20</item>
+        <item name="android:paddingRight">@dimen/x20</item>
+        <item name="android:paddingBottom">@dimen/x20</item>
+    </style>
+
     <style name="TwomuewVideoView" parent="TwoWayViewBase">
         <item name="android:orientation">horizontal</item>
         <item name="android:scrollbars">none</item>
@@ -216,6 +226,15 @@
         <item name="android:layout_marginRight">@dimen/x10</item>
         <item name="android:textSize">@dimen/sp_18</item>
         <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="mk_btn_con">
+        <item name="android:layout_width">@dimen/x150</item>
+        <item name="android:layout_height">@dimen/x60</item>
+        <item name="android:background">@drawable/foc_back_four</item>
+        <item name="android:textColor">@drawable/foc_tv_two</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/sp_18</item>
     </style>
 
 

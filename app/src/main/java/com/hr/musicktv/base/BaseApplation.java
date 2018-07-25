@@ -5,6 +5,8 @@ import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
 
+import com.danikula.videocache.HttpProxyCacheServer;
+
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
@@ -62,6 +64,20 @@ public class BaseApplation extends Application  {
                 .schemaVersion(2)
                 .build();
         Realm.setDefaultConfiguration(myConfig);
+    }
+
+
+    private HttpProxyCacheServer proxy;
+
+    public static HttpProxyCacheServer getProxy(Context context) {
+        BaseApplation app = (BaseApplation) context.getApplicationContext();
+        return app.proxy == null ? (app.proxy = app.newProxy()) : app.proxy;
+    }
+
+    private HttpProxyCacheServer newProxy() {
+        return new HttpProxyCacheServer.Builder(this)
+                .maxCacheFilesCount(20)
+                .build();
     }
 
 }

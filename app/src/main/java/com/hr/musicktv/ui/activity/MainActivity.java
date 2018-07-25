@@ -51,7 +51,7 @@ public class MainActivity extends BaseActivity implements BaseFragment.FocusBord
         Intent intent = new Intent();
         switch (v.getId()) {
             case R.id.hit_song_layout://金曲
-                intent.setClass(MainActivity.this,SearchOrListDataActivity.class);
+                intent.setClass(MainActivity.this,MusicPlayerActivity.class);
                 break;
             case R.id.T_one_layout://推1
                 intent.setClass(MainActivity.this,SearchOrListDataActivity.class);

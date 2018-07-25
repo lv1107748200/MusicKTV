@@ -28,9 +28,13 @@ public class FunctionMenuAdapter extends CommonRecyclerViewAdapter {
     @Override
     public void onBindItemHolder(CommonRecyclerViewHolder helper, Object item, int position) {
 
-        if(item instanceof ItemBean){
-            helper.getHolder().setText(R.id.title, ((ItemBean) item).title);
-        }
 
+            helper.getHolder().setText(R.id.title, position + "");
+
+    }
+
+    @Override
+    public int getItemCount() {
+        return 100;
     }
 }

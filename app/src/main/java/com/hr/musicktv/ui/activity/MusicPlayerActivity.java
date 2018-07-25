@@ -1,6 +1,7 @@
 package com.hr.musicktv.ui.activity;
 
 import android.view.KeyEvent;
+import android.view.View;
 import android.widget.Toast;
 
 import com.hr.musicktv.R;
@@ -19,12 +20,16 @@ import com.hr.musicktv.utils.NLog;
 import com.hr.musicktv.utils.NToast;
 import com.hr.musicktv.utils.UrlUtils;
 import com.hr.musicktv.widget.dialog.LoadingDialog;
+import com.hr.musicktv.widget.music.MusicPlayerLayout;
 import com.hr.musicktv.widget.single.UserInfoManger;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Map;
+
+import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * 播放页
@@ -39,6 +44,24 @@ public class MusicPlayerActivity extends BaseActivity {
     private String playId;
     private Detail detail;
 
+    @BindView(R.id.music_player)
+    MusicPlayerLayout musicPlayer;
+
+    @OnClick({R.id.btn_menu,R.id.btn_center})
+    public void Onclick(View view){
+
+        switch (view.getId()){
+            case R.id.btn_menu:
+                musicPlayer.onMenu();
+                musicPlayer.onKeyDown();
+                break;
+            case R.id.btn_center:
+                musicPlayer.onCenter();
+                break;
+        }
+
+    }
+
     @Override
     public int getLayout() {
         return R.layout.activity_player;
@@ -48,6 +71,9 @@ public class MusicPlayerActivity extends BaseActivity {
         super.init();
 
         playId = getIntent().getStringExtra("PLAYID");
+        musicPlayer.setContextPlayer(this);
+
+        musicPlayer.setUrlAndPlay(url);
 
     }
 
@@ -150,6 +176,8 @@ public class MusicPlayerActivity extends BaseActivity {
                 return true;
         }
 
+
+
         return super.onKeyUp(keyCode, event);
     }
 
@@ -157,13 +185,14 @@ public class MusicPlayerActivity extends BaseActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
         //    NLog.d(NLog.TAGOther,"keyCode--->" + keyCode);
+        musicPlayer.onKeyDown();
 
         switch (keyCode) {
 
             case KeyEvent.KEYCODE_ENTER:     //确定键enter
             case KeyEvent.KEYCODE_DPAD_CENTER:
 
-
+                musicPlayer.onCenter();
 
                 break;
 
@@ -182,7 +211,7 @@ public class MusicPlayerActivity extends BaseActivity {
                 break;
             case KeyEvent.KEYCODE_MENU:
                 //    controlPlayer.onClickKey(KeyEvent.KEYCODE_MENU);
-
+                musicPlayer.onMenu();
                 break;
 
             case KeyEvent.KEYCODE_DPAD_DOWN:   //向下键
@@ -204,7 +233,7 @@ public class MusicPlayerActivity extends BaseActivity {
                 break;
 
             case     KeyEvent.KEYCODE_0:   //数字键0
-
+                musicPlayer.onMenu();
                 //  finish();
 
                 break;
@@ -263,7 +292,7 @@ public class MusicPlayerActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
+        musicPlayer.release();
     }
 
 }
