@@ -23,6 +23,7 @@ import com.hr.musicktv.R;
 
 import com.hr.musicktv.db.PHData;
 import com.hr.musicktv.net.entry.ListData;
+import com.hr.musicktv.net.entry.response.MKGetStarList;
 import com.hr.musicktv.net.entry.response.Result;
 import com.hr.musicktv.net.entry.response.WhatList;
 import com.hr.musicktv.ui.adapter.base.CommonRecyclerViewAdapter;
@@ -68,8 +69,8 @@ public class GridAdapter extends CommonRecyclerViewAdapter {
     public void onBindItemHolder(CommonRecyclerViewHolder helper, Object item, int position) {
 
         if(CLASSIFYLAYOUT == type){
-            if(item instanceof ListData)
-            helper.getHolder().setText(R.id.title,((ListData) item).getTitle());
+            if(item instanceof MKGetStarList)
+            helper.getHolder().setText(R.id.title,((MKGetStarList) item).getTitle());
             helper.getHolder().getView(R.id.classly_layout).setBackgroundColor(ColorUtils.getColor());
 
         }else if(FAVORITELAYOUT == type){

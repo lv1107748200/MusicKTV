@@ -1,6 +1,7 @@
 package com.hr.musicktv.ui.activity;
 
 
+import android.content.Intent;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -9,13 +10,23 @@ import android.widget.TextView;
 
 import com.hr.musicktv.R;
 import com.hr.musicktv.base.BaseActivity;
+import com.hr.musicktv.common.ImmobilizationData;
+import com.hr.musicktv.net.base.BaseDataResponse;
+import com.hr.musicktv.net.base.BaseResponse;
 import com.hr.musicktv.net.entry.ListData;
+import com.hr.musicktv.net.entry.request.MKSearch;
+import com.hr.musicktv.net.entry.response.MKGetStarList;
+import com.hr.musicktv.net.http.HttpCallback;
+import com.hr.musicktv.net.http.HttpException;
 import com.hr.musicktv.ui.adapter.GridAdapter;
 import com.hr.musicktv.ui.adapter.ListDataMenuAdapter;
 import com.hr.musicktv.ui.adapter.MusicSelectAdapter;
+import com.hr.musicktv.utils.CheckUtil;
 import com.hr.musicktv.utils.DisplayUtils;
 import com.hr.musicktv.utils.NLog;
+import com.hr.musicktv.utils.NToast;
 import com.hr.musicktv.widget.AffPasWindow;
+import com.hr.musicktv.widget.dialog.LoadingDialog;
 import com.hr.musicktv.widget.keyboard.SkbContainer;
 import com.hr.musicktv.widget.keyboard.SoftKey;
 import com.hr.musicktv.widget.keyboard.SoftKeyBoardListener;
@@ -27,6 +38,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+
+import static com.hr.musicktv.common.ImmobilizationData.StarCLASSIFY;
+import static com.hr.musicktv.ui.adapter.GridAdapter.CLASSIFYLAYOUT;
 
 /*
  * lv   2018/7/23  分类搜索
@@ -56,6 +70,10 @@ public class ClassifyListDataActicity extends BaseActivity implements AffPasWind
     private StringBuffer stringBuffer;//搜索字符
 
 
+    private String tags;
+    private String url;
+    private String type;
+
     @Override
     public int getLayout() {
         return R.layout.activity_classify_list;
@@ -68,30 +86,22 @@ public class ClassifyListDataActicity extends BaseActivity implements AffPasWind
         setListener();
         initData();
         initSkb();
+
+      //  load(ImmobilizationData.Tags.getUrlByIndex(0));
     }
 
     private void initData(){
-        List<ListData> listData = new ArrayList<>();
-
-        for (int i =0 ;i< 37; i++){
-            listData.add(new ListData());
-        }
-
-        gridAdapter.repaceDatas(listData);
-
         List<ListData> listData2 = new ArrayList<>();
-        for(int i =0 ; i<3; i++){
+        for(int i =0 ; i< ImmobilizationData.Tags.values().length; i++){
             ListData listData1 = new ListData();
-            if(i==0){
-                listData1.setTitle("歌手分类");
-            }else if(i==1){
-                listData1.setTitle("语种分类");
-            }else if(i==2){
-                listData1.setTitle("曲风分类");
-            }
+
+            listData1.setTitle(ImmobilizationData.Tags.getNameByIndex(i));
+
             listData2.add(listData1);
         }
         listDataMenuAdapter.repaceDatas(listData2);
+
+        mainMenu.setSelection(0);
     }
     private void setListener(){
 
@@ -101,7 +111,7 @@ public class ClassifyListDataActicity extends BaseActivity implements AffPasWind
         listDataMenuAdapter = new ListDataMenuAdapter(this,ListDataMenuAdapter.ONE);
         mainMenu.setAdapter(listDataMenuAdapter);
 
-        gridAdapter = new GridAdapter(this);
+        gridAdapter = new GridAdapter(this,CLASSIFYLAYOUT);
         mainList.setAdapter(gridAdapter);
 
 
@@ -111,6 +121,22 @@ public class ClassifyListDataActicity extends BaseActivity implements AffPasWind
             public void onItemSelected(TvRecyclerView parent, View itemView, int position) {
                 onMoveFocusBorder(itemView, 1.0f, DisplayUtils.dip2px(3));
 
+            Object o =    listDataMenuAdapter.getItem(position);
+
+                if(o instanceof  ListData){
+
+                    String url = ImmobilizationData.Tags.getUrlByName(((ListData) o).getTitle());
+
+                    if(url.equals(ClassifyListDataActicity.this.url)){
+
+                    }else {
+                        type = ((ListData) o).getTitle();
+
+                        lifecycleSubject.onNext(ActivityEvent.STOP);
+                        lifecycleSubject.onNext(ActivityEvent.START);
+                        load(url);
+                    }
+                }
 
             }
 
@@ -130,7 +156,26 @@ public class ClassifyListDataActicity extends BaseActivity implements AffPasWind
             @Override
             public void onItemClick(TvRecyclerView parent, View itemView, int position) {
 
+                Object o = gridAdapter.getItem(position);
 
+                if(o instanceof MKGetStarList){
+                    Intent intent = new Intent();
+                    if(true){
+                        intent.setClass(ClassifyListDataActicity.this,SearchOrListDataActivity.class);
+                        com.hr.musicktv.net.entry.request.MKSearch mkSearch = new MKSearch();
+
+                        if(StarCLASSIFY.equals(type)){
+                            mkSearch.setStar(((MKGetStarList) o).getTitle());
+                        }else if(ImmobilizationData.LanCLASSIFY.equals(type)){
+                            mkSearch.setLanguage(((MKGetStarList) o).getTitle());
+                        }else if(ImmobilizationData.StyleCLASSIFY.equals(type)){
+                            mkSearch.setStyle(((MKGetStarList) o).getTitle());
+                        }
+
+                        intent.putExtra(SearchOrListDataActivity.NAME,mkSearch);
+                        startActivity(intent);
+                    }
+                }
 
             }
         });
@@ -152,6 +197,40 @@ public class ClassifyListDataActicity extends BaseActivity implements AffPasWind
                 mFocusBorder.setVisible(hasFocus);
             }
         });
+    }
+
+    private void load(String url){
+        if(CheckUtil.isEmpty(url))
+            return;
+        this.url = url;
+
+        ComList();
+    }
+
+    private void ComList(){
+
+        baseService.ComList(url, new HttpCallback<BaseResponse<BaseDataResponse<MKGetStarList>>>() {
+            @Override
+            public void onError(HttpException e) {
+                if(e.getCode() == 1){
+                    NToast.shortToastBaseApp(e.getMsg());
+                }else {
+
+                }
+                LoadingDialog.disMiss();
+            }
+
+            @Override
+            public void onSuccess(BaseResponse<BaseDataResponse<MKGetStarList>> baseDataResponseBaseResponse) {
+
+                List<MKGetStarList> mkGetStarLists = baseDataResponseBaseResponse.getData().getInfo();
+
+                if(!CheckUtil.isEmpty(mkGetStarLists)){
+                    gridAdapter.repaceDatas(mkGetStarLists);
+                }
+
+            }
+        },ClassifyListDataActicity.this.bindUntilEvent(ActivityEvent.DESTROY));
     }
 
 

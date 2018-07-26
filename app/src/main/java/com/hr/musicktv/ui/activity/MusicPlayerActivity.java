@@ -39,6 +39,7 @@ public class MusicPlayerActivity extends BaseActivity {
     private boolean shortPress = false;
    // private String url = "rtmp://live.hkstv.hk.lxdns.com/live/hks";
     private String url = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
+    //private String url = "http://localhost:8080/demo/l_l_h.mkv";
     private long firstTime=0;
 
     private String playId;
@@ -71,6 +72,7 @@ public class MusicPlayerActivity extends BaseActivity {
         super.init();
 
         playId = getIntent().getStringExtra("PLAYID");
+        musicPlayer.setContext(this);
 
         musicPlayer.setUrlAndPlay(url);
 

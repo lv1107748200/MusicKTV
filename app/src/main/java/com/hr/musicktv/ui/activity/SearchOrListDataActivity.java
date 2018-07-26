@@ -14,6 +14,7 @@ import com.hr.musicktv.net.base.BaseDataResponse;
 import com.hr.musicktv.net.base.BaseResponse;
 import com.hr.musicktv.net.entry.ListData;
 import com.hr.musicktv.net.entry.request.WhatCom;
+import com.hr.musicktv.net.entry.response.MKSearch;
 import com.hr.musicktv.net.entry.response.SearchList;
 import com.hr.musicktv.net.entry.response.UserToken;
 import com.hr.musicktv.net.entry.response.WhatList;
@@ -26,6 +27,7 @@ import com.hr.musicktv.utils.CheckUtil;
 import com.hr.musicktv.utils.DisplayUtils;
 import com.hr.musicktv.utils.NLog;
 import com.hr.musicktv.utils.NToast;
+import com.hr.musicktv.utils.StringUtils;
 import com.hr.musicktv.widget.AffPasWindow;
 import com.hr.musicktv.widget.dialog.LoadingDialog;
 import com.hr.musicktv.widget.keyboard.SkbContainer;
@@ -46,6 +48,8 @@ import butterknife.BindView;
  */
 public class SearchOrListDataActivity extends BaseActivity implements AffPasWindow.AffPasWindowCallBack {
 
+    public static final String  NAME = "MKSEARCH";
+
     public static int pp = 0;
 
     @BindView(R.id.tv_show_message)
@@ -57,7 +61,7 @@ public class SearchOrListDataActivity extends BaseActivity implements AffPasWind
     @BindView(R.id.tv_list)
     TvRecyclerView tvList;
 
-    private String type;
+
     private AffPasWindow affPasWindow;
     private MusicSelectAdapter musicSelectAdapter;
 
@@ -67,8 +71,9 @@ public class SearchOrListDataActivity extends BaseActivity implements AffPasWind
     private boolean isLoadMore = false;
     private int pageNo = 1;
 
-    private String Tags = "讨债人";
-
+    private String Tags;
+    private String type;
+    private com.hr.musicktv.net.entry.request.MKSearch mkSearch;
     @Override
     public int getLayout() {
         return R.layout.activity_search;
@@ -79,11 +84,20 @@ public class SearchOrListDataActivity extends BaseActivity implements AffPasWind
         super.init();
 
         Intent intent = getIntent();
-        type = intent.getStringExtra("TYPE");
-        if(!CheckUtil.isEmpty(type)){
-            tvTitleChild.setText(type+getString(R.string.svp_search));
+
+        mkSearch = intent.getParcelableExtra(NAME);
+
+        if(!CheckUtil.isEmpty(mkSearch)){
+            tvTitleChild.setText(
+                    StringUtils.setWhatAdd(mkSearch.getStar())
+                    +StringUtils.setWhatAdd(mkSearch.getLanguage())
+                    +StringUtils.setWhatAdd(mkSearch.getStyle())
+                    +StringUtils.setWhatAdd(mkSearch.getTop())
+                    +getString(R.string.mk_sel)
+            );
         }else {
-            tvTitleChild.setText(getString(R.string.svp_search));
+            mkSearch = new com.hr.musicktv.net.entry.request.MKSearch();
+            tvTitleChild.setText(getString(R.string.mk_sel));
         }
 
 
@@ -166,16 +180,16 @@ public class SearchOrListDataActivity extends BaseActivity implements AffPasWind
         setListener();
 
 
-        initData();
+       // initData();
 
-       // load(Tags);
+        load(Tags);
     }
 
     private void initData(){
         List<ListData> listData = new ArrayList<>();
 
         for (int i =0 ;i< 37; i++){
-            listData.add(new ListData(""+i));
+            listData.add(new ListData("... ..."));
         }
 
         musicSelectAdapter.repaceDatas(listData);
@@ -200,7 +214,6 @@ public class SearchOrListDataActivity extends BaseActivity implements AffPasWind
 
             @Override
             public void onItemClick(TvRecyclerView parent, View itemView, int position) {
-
 
             }
         });
@@ -236,8 +249,8 @@ public class SearchOrListDataActivity extends BaseActivity implements AffPasWind
 
     private void load(String T){
 
-        if(CheckUtil.isEmpty(T))
-            return;
+//        if(CheckUtil.isEmpty(T))
+//            return;
 
         Tags = T;
 
@@ -245,46 +258,40 @@ public class SearchOrListDataActivity extends BaseActivity implements AffPasWind
     }
 
     private void Search(){
-        UserToken userToken = UserInfoManger.getInstance().getUserToken();
-        if(null == userToken){
+        if(null == mkSearch)
             return;
-        }
-        WhatCom data = new WhatCom(
-                UserInfoManger.getInstance().getToken(),
-                "0",
-                userToken.getUID(),
-                userToken.getGID(),
-                userToken.getSign(),
-                userToken.getExpire(),
-                "20",
-                ""+pageNo,
-                Tags
-        );
-        baseService.Search(data, new HttpCallback<BaseResponse<BaseDataResponse<SearchList>>>() {
+
+        mkSearch.setTitle(Tags);
+
+
+        baseService.Search(mkSearch, new HttpCallback<BaseResponse<BaseDataResponse<MKSearch>>>() {
             @Override
             public void onError(HttpException e) {
                 if(e.getCode() == 1){
                     NToast.shortToastBaseApp(e.getMsg());
                 }else {
-                    LoadingDialog.disMiss();
+
                 }
+                LoadingDialog.disMiss();
                 if(isLoadMore){
                     tvList.setLoadingMore(false);
                 }
             }
 
             @Override
-            public void onSuccess(BaseResponse<BaseDataResponse<SearchList>> baseDataResponseBaseResponse) {
+            public void onSuccess(BaseResponse<BaseDataResponse<MKSearch>> baseDataResponseBaseResponse) {
 
+                List<MKSearch>  whatLists = baseDataResponseBaseResponse.getData().getInfo();
 
-                List<WhatList>  whatLists = baseDataResponseBaseResponse.getData().getInfo().get(0).getResult();
-                setTvList(whatLists);
+                if(!CheckUtil.isEmpty(whatLists)){
+                    musicSelectAdapter.repaceDatas(whatLists);
+                }
 
             }
         },SearchOrListDataActivity.this.bindUntilEvent(ActivityEvent.STOP));
     }
 
-    private void setTvList(List<WhatList>  whatLists){
+    private void setTvList(List<MKSearch>  whatLists){
         if(isLoadMore){
             tvList.setLoadingMore(false);
         }

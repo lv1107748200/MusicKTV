@@ -130,6 +130,8 @@ public class MusicControlView extends BaseLayout implements MethodLayout , Loadi
 
         ButterKnife.bind(this,mainView);
 
+        load_relayout.setLoadingCallBack(this);
+
     }
 
     @Override
@@ -248,8 +250,8 @@ public class MusicControlView extends BaseLayout implements MethodLayout , Loadi
      * 设置加载页面
      */
     public void setLoadingLayout(int type,int cas, LoadingLayout.ShowMain showMain) {
-        if(controlMainLayout.getVisibility() == GONE)
-            controlMainLayout.setVisibility(VISIBLE);
+//        if(controlMainLayout.getVisibility() == GONE)
+//            controlMainLayout.setVisibility(VISIBLE);
         switch (type){
             case 0://初次加载
                 load_relayout.setLoad_layout(android.R.color.transparent);//背景设置

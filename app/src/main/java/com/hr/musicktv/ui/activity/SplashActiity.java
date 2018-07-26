@@ -44,15 +44,6 @@ public class SplashActiity extends BaseActivity implements LoadingLayout.Loading
         //load_relayout.setLoadingCallBack(this);
         //userAutoLogin();
 
-        if(CheckUtil.isEmpty(UserInfoManger.getInstance().getUserToken())){
-           // load_relayout.setLoadingLayout(LoadingLayout.ONE,null);
-
-        }else {
-            Intent intent = new Intent();
-            intent.setClass(SplashActiity.this,MainActivity.class);
-            startActivity(intent);
-            finish();
-        }
         Intent intent = new Intent();
         intent.setClass(SplashActiity.this,MainActivity.class);
         startActivity(intent);
@@ -60,68 +51,11 @@ public class SplashActiity extends BaseActivity implements LoadingLayout.Loading
     }
 
     private void userAutoLogin(){
-        baseService.userAutoLogin(new AutoLogin("AtGukMyVscE54QkNx+QMEOfQpyJIg2T55EESZ589VySeHUW7AogBzBIFMEwrBHYa"),
-                new HttpCallback<BaseResponse<InfoToken>>() {
-            @Override
-            public void onError(HttpException e) {
-                load_relayout.setLoadingLayout(LoadingLayout.TWO,new LoadingLayout.ShowMain(){
-                    @Override
-                    public String getBtnText() {
-                        return "重新认证";
-                    }
 
-                    @Override
-                    public String getText() {
-                        return "机顶盒认证失败！";
-                    }
-                });
-            }
-
-            @Override
-            public void onSuccess(BaseResponse<InfoToken> infoTokenBaseResponse) {
-
-                if(!CheckUtil.isEmpty(infoTokenBaseResponse.getData().getInfo()))
-                UserInfoManger.getInstance().setToken(infoTokenBaseResponse.getData().getInfo().get(0));
-
-
-                validate();
-            }
-        });
     }
 
     private void validate(){
 
-        BaseDataRequest baseDataRequest = new BaseDataRequest();
-        baseDataRequest.setCID("1");
-        baseDataRequest.setToken(UserInfoManger.getInstance().getToken());
-
-        baseService.validate(baseDataRequest, new HttpCallback<BaseResponse<BaseDataResponse<UserInfo>>>() {
-            @Override
-            public void onError(HttpException e) {
-                load_relayout.setLoadingLayout(LoadingLayout.TWO,new LoadingLayout.ShowMain(){
-                    @Override
-                    public String getBtnText() {
-                        return "重新认证";
-                    }
-
-                    @Override
-                    public String getText() {
-                        return "机顶盒认证失败！";
-                    }
-                });
-            }
-
-            @Override
-            public void onSuccess(BaseResponse<BaseDataResponse<UserInfo>> baseDataResponseBaseResponse) {
-                if(!CheckUtil.isEmpty(baseDataResponseBaseResponse.getData().getInfo()))
-                UserInfoManger.getInstance().setUserToken(baseDataResponseBaseResponse.getData().getInfo().get(0).getUserToken());
-
-                Intent intent = new Intent();
-                intent.setClass(SplashActiity.this,MainActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
     }
 
 

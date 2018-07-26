@@ -28,6 +28,7 @@
             >
 
             <ImageView
+                android:id="@+id/j_image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="fitXY"
@@ -35,7 +36,7 @@
                 />
             <TextView
                 android:duplicateParentState="true"
-                android:id="@+id/title"
+                android:id="@+id/j_tv_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@drawable/foc_tv_color_one"
@@ -69,6 +70,18 @@
                         android:layout_height="match_parent"
                         android:id="@+id/t_one_image"
                         android:background="@drawable/hehe"
+                        android:scaleType="fitXY"
+                        />
+
+                    <TextView
+                        android:duplicateParentState="true"
+                        android:id="@+id/t_one_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@drawable/foc_tv_color_one"
+                        android:layout_gravity="center"
+                        android:textSize="@dimen/sp_18"
+                        android:textStyle="bold"
                         />
 
                 </com.hr.musicktv.widget.layout.RoundFrameLayout>
@@ -90,6 +103,17 @@
                             android:layout_height="match_parent"
                             android:id="@+id/t_two_image"
                             android:background="@drawable/hehe"
+                            android:scaleType="fitXY"
+                            />
+                        <TextView
+                            android:duplicateParentState="true"
+                            android:id="@+id/t_two_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@drawable/foc_tv_color_one"
+                            android:layout_gravity="center"
+                            android:textSize="@dimen/sp_18"
+                            android:textStyle="bold"
                             />
 
                     </com.hr.musicktv.widget.layout.RoundFrameLayout>
@@ -105,8 +129,18 @@
                             android:layout_height="match_parent"
                             android:id="@+id/t_three_image"
                             android:background="@drawable/hehe"
+                            android:scaleType="fitXY"
                             />
-
+                        <TextView
+                            android:duplicateParentState="true"
+                            android:id="@+id/t_three_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@drawable/foc_tv_color_one"
+                            android:layout_gravity="center"
+                            android:textSize="@dimen/sp_18"
+                            android:textStyle="bold"
+                            />
                     </com.hr.musicktv.widget.layout.RoundFrameLayout>
 
                 </LinearLayout>

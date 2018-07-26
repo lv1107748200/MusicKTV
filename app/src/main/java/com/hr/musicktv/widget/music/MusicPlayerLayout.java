@@ -6,6 +6,7 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.TimedText;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
@@ -22,6 +23,7 @@ import com.hr.musicktv.base.BaseApplation;
 import com.hr.musicktv.utils.CheckUtil;
 import com.hr.musicktv.utils.DisplayUtils;
 import com.hr.musicktv.utils.NLog;
+import com.hr.musicktv.widget.RawDataSourceProvider;
 import com.hr.musicktv.widget.pop.CustomPopuWindConfig;
 import com.hr.musicktv.widget.pop.FunctionMenuPopWindow;
 import com.hr.musicktv.widget.pop.MusicSelectPopWindow;
@@ -39,22 +41,28 @@ import tv.danmaku.ijk.media.player.IjkTimedText;
  */
 public class MusicPlayerLayout extends BaseLayout
         implements SurfaceHolder.Callback2
-    ,IMediaPlayer.OnBufferingUpdateListener
-    ,IMediaPlayer.OnCompletionListener
-    ,IMediaPlayer.OnErrorListener
-    ,IMediaPlayer.OnInfoListener
-    ,IMediaPlayer.OnPreparedListener
-    ,IMediaPlayer.OnSeekCompleteListener
-    ,IMediaPlayer.OnTimedTextListener
-    ,IMediaPlayer.OnVideoSizeChangedListener
+    ,MediaPlayer.OnBufferingUpdateListener
+    ,MediaPlayer.OnCompletionListener
+    ,MediaPlayer.OnErrorListener
+    ,MediaPlayer.OnInfoListener
+    ,MediaPlayer.OnPreparedListener
+    ,MediaPlayer.OnSeekCompleteListener
+    ,MediaPlayer.OnTimedTextListener
+    ,MediaPlayer.OnVideoSizeChangedListener
     ,MethodWhat,MethodView
 {
     private volatile String url = null;
     private SurfaceView surfaceView;
-    private IjkMediaPlayer mediaPlayer;
+    private MediaPlayer mediaPlayer;
     private MusicControlView musicControlView;
 
     private volatile boolean isCreated;
+
+    private Context context;
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
 
     public MusicPlayerLayout(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -97,19 +105,19 @@ public class MusicPlayerLayout extends BaseLayout
 
 
     @Override
-    public void onBufferingUpdate(IMediaPlayer iMediaPlayer, int i) {
+    public void onBufferingUpdate(MediaPlayer iMediaPlayer, int i) {
 
     }
 
     @Override
-    public void onCompletion(IMediaPlayer iMediaPlayer) {
+    public void onCompletion(MediaPlayer iMediaPlayer) {
         if(null != musicControlView){
             musicControlView.onCompletion();
         }
     }
 
     @Override
-    public boolean onError(IMediaPlayer iMediaPlayer, int i, int i1) {
+    public boolean onError(MediaPlayer iMediaPlayer, int i, int i1) {
         if(null != musicControlView){
             musicControlView.onError();
         }
@@ -117,33 +125,34 @@ public class MusicPlayerLayout extends BaseLayout
     }
 
     @Override
-    public boolean onInfo(IMediaPlayer iMediaPlayer, int i, int i1) {
+    public boolean onInfo(MediaPlayer iMediaPlayer, int i, int i1) {
         return false;
     }
 
     @Override
-    public void onPrepared(IMediaPlayer iMediaPlayer) {
+    public void onPrepared(MediaPlayer iMediaPlayer) {
         if(null != musicControlView){
             musicControlView.onPrepared();
         }
     }
 
     @Override
-    public void onSeekComplete(IMediaPlayer iMediaPlayer) {
+    public void onSeekComplete(MediaPlayer iMediaPlayer) {
         if(null != musicControlView){
             musicControlView.onSeekComplete();
         }
     }
 
     @Override
-    public void onTimedText(IMediaPlayer iMediaPlayer, IjkTimedText ijkTimedText) {
+    public void onTimedText(MediaPlayer mp, TimedText text) {
 
     }
 
     @Override
-    public void onVideoSizeChanged(IMediaPlayer iMediaPlayer, int i, int i1, int i2, int i3) {
+    public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
 
     }
+
     @Override
     public void start() {
         if(null != musicControlView){
@@ -157,9 +166,9 @@ public class MusicPlayerLayout extends BaseLayout
     @Override
     public void vStart() {
         if(null != mediaPlayer){
-            if(mediaPlayer.isPlayable()){
+          //  if(mediaPlayer.isPlayable()){
                 start();
-            }
+         //   }
         }
     }
 
@@ -298,9 +307,9 @@ public class MusicPlayerLayout extends BaseLayout
             if(mediaPlayer.isPlaying()){
                 pause();
             }else {
-                if(mediaPlayer.isPlayable()){
+               // if(mediaPlayer.isPlayable()){
                     start();
-                }
+               // }
             }
         }
     }
@@ -328,16 +337,22 @@ public class MusicPlayerLayout extends BaseLayout
         }
     }
 
+
     private void setCache(String url, boolean isCache){
+
         if(isCache){
             HttpProxyCacheServer proxy = BaseApplation.getProxy(getContext());
             url = proxy.getProxyUrl(url);
         }
-        try {
-            mediaPlayer.setDataSource(url);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+//        String path = "android.resource://" + getContext().getPackageName() + "/" + R.raw.ben_pao;
+//        mediaPlayer.setDataSource(RawDataSourceProvider.create(getContext(), Uri.parse(path)));
+
+//        try {
+//            mediaPlayer.setDataSource(url);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
     public void setUrlAndPlay(String url) {
         this.url = url;
@@ -354,34 +369,28 @@ public class MusicPlayerLayout extends BaseLayout
         return url;
     }
 
-    public IjkMediaPlayer initMediaPlayer(String url){
-        if(null == mediaPlayer){
-            mediaPlayer = new IjkMediaPlayer();
-        }else {
-            mediaPlayer.reset();
-        }
-        mediaPlayer.native_setLogLevel(IjkMediaPlayer.IJK_LOG_DEBUG);
+    public MediaPlayer initMediaPlayer(String url){
+//        if(null == mediaPlayer){
+//            mediaPlayer =  MediaPlayer.create(getContext(),R.raw.ben_pao);
+//        }else {
+//            mediaPlayer.reset();
+//        }
+
+        mediaPlayer =  MediaPlayer.create(context,R.raw.ben_pao);
+
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         //循环播放
         // mediaPlayer.setLooping(true);
-        //SeekTo的时候，会跳回到拖动前的位置
-        mediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "enable-accurate-seek", 1);
         //屏幕常亮
         mediaPlayer.setScreenOnWhilePlaying(true);
 
-        //开启硬解码
-        if (false) {
-            mediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec", 1);
-            mediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec-auto-rotate", 1);
-            mediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec-handle-resolution-change", 1);
-        }
 
         if(CheckUtil.isEmpty(url)){
 
             return mediaPlayer;
         }
 
-        setCache(url,true);
+        setCache(url,false);
 
         mediaPlayer.setDisplay(surfaceView.getHolder());
         mediaPlayer.setOnPreparedListener(this);
@@ -395,4 +404,82 @@ public class MusicPlayerLayout extends BaseLayout
         mediaPlayer.prepareAsync();
         return  mediaPlayer;
     }
+
+
+
+
+//    private void setCache(String url, boolean isCache){
+//
+//        if(isCache){
+//            HttpProxyCacheServer proxy = BaseApplation.getProxy(getContext());
+//            url = proxy.getProxyUrl(url);
+//        }
+//
+////        String path = "android.resource://" + getContext().getPackageName() + "/" + R.raw.ben_pao;
+////        mediaPlayer.setDataSource(RawDataSourceProvider.create(getContext(), Uri.parse(path)));
+//
+////        try {
+////            mediaPlayer.setDataSource(url);
+////        } catch (IOException e) {
+////            e.printStackTrace();
+////        }
+//    }
+//    public void setUrlAndPlay(String url) {
+//        this.url = url;
+//        if(isCreated){
+//            initMediaPlayer(url);
+//        }
+//    }
+//
+//    public void setUrl(String url) {
+//        this.url = url;
+//    }
+//
+//    public String getUrl() {
+//        return url;
+//    }
+//
+//    public IjkMediaPlayer initMediaPlayer(String url){
+//        if(null == mediaPlayer){
+//            mediaPlayer = new IjkMediaPlayer();
+//        }else {
+//            mediaPlayer.reset();
+//        }
+//        mediaPlayer.native_setLogLevel(IjkMediaPlayer.IJK_LOG_DEBUG);
+//        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+//        //循环播放
+//        // mediaPlayer.setLooping(true);
+//        //SeekTo的时候，会跳回到拖动前的位置
+//        mediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "enable-accurate-seek", 1);
+//        //屏幕常亮
+//        mediaPlayer.setScreenOnWhilePlaying(true);
+//
+//        //开启硬解码
+//        if (false) {
+//            mediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec", 1);
+//            mediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec-auto-rotate", 1);
+//            mediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec-handle-resolution-change", 1);
+//        }
+//
+//        if(CheckUtil.isEmpty(url)){
+//
+//            return mediaPlayer;
+//        }
+//
+//        setCache(url,false);
+//
+//        mediaPlayer.selectTrack(2);
+//
+//        mediaPlayer.setDisplay(surfaceView.getHolder());
+//        mediaPlayer.setOnPreparedListener(this);
+//        mediaPlayer.setOnCompletionListener(this);
+//        mediaPlayer.setOnBufferingUpdateListener(this);
+//        mediaPlayer.setOnSeekCompleteListener(this);
+//        mediaPlayer.setOnVideoSizeChangedListener(this);
+//        mediaPlayer.setOnErrorListener(this);
+//        mediaPlayer.setOnInfoListener(this);
+//        mediaPlayer.setOnTimedTextListener(this);
+//        mediaPlayer.prepareAsync();
+//        return  mediaPlayer;
+//    }
 }

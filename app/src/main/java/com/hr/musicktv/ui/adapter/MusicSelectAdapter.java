@@ -2,6 +2,7 @@ package com.hr.musicktv.ui.adapter;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +10,8 @@ import android.view.View;
 
 import com.hr.musicktv.R;
 import com.hr.musicktv.net.entry.ListData;
+import com.hr.musicktv.net.entry.response.MKSearch;
+import com.hr.musicktv.ui.activity.MusicPlayerActivity;
 import com.hr.musicktv.ui.adapter.base.CommonRecyclerViewAdapter;
 import com.hr.musicktv.ui.adapter.base.CommonRecyclerViewHolder;
 import com.hr.musicktv.utils.CheckUtil;
@@ -48,9 +51,9 @@ public class MusicSelectAdapter extends CommonRecyclerViewAdapter {
     @Override
     public void onBindItemHolder(final CommonRecyclerViewHolder helper, Object item, int position) {
 
-        if(item instanceof ListData){
+        if(item instanceof MKSearch){
 
-          final   ListData listData = (ListData) item;
+          final   MKSearch listData = (MKSearch) item;
             helper.getHolder().setText(R.id.title_grid,listData.getTitle());
 
 
@@ -115,7 +118,8 @@ public class MusicSelectAdapter extends CommonRecyclerViewAdapter {
                         .setOnClickListener(R.id.btn_song, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        Intent intent = new Intent(context, MusicPlayerActivity.class);
+                        context.startActivity(intent);
                     }
                 })
                 .setOnClickListener(R.id.btn_del, null)
@@ -206,7 +210,7 @@ public class MusicSelectAdapter extends CommonRecyclerViewAdapter {
         Collections.sort(list, MusicListComparator.getInstance());
     }
 
-    private void setStick(ListData listData){
+    private void setStick(MKSearch listData){
         if(listData.isStick()){
             listData.setStick(false);
         }else {
