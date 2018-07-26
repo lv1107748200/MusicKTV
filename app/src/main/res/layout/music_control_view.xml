@@ -8,7 +8,9 @@
         android:id="@+id/control_main_layout"
         android:focusable="false"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -175,6 +177,22 @@
         android:layout_height="match_parent"
         >
     </com.hr.musicktv.widget.layout.LoadingLayout>
+
+
+    <com.owen.tvrecyclerview.widget.TvRecyclerView
+        android:background="@color/c_ttt"
+        android:id="@+id/list_menu_one"
+        style="@style/FiveWayView"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="@dimen/x500"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        app:tv_selectedItemIsCentered="true"
+        android:orientation="vertical"
+        app:tv_layoutManager="ListLayoutManager"
+        android:layout_alignParentRight="true"
+        android:visibility="gone"
+        />
 
 
 </RelativeLayout>

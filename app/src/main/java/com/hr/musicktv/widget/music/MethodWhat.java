@@ -12,6 +12,6 @@ public interface MethodWhat {
      void fastReverse();//快退
      void onCenter();//中心建
      void onMenu();//菜单键
-     void onBack();//back
+     boolean onBack();//back
      void onKeyDown();
 }

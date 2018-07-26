@@ -15,6 +15,6 @@ public interface MethodView {
     long getTotalPosition();//总时间
     void songList();//歌单
     boolean getIsPlayer();//是否正在播放
-
     void vStart();//开始
+    void select();//选中那一集
 }

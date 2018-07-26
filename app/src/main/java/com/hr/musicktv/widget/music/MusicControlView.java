@@ -7,12 +7,19 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.hr.musicktv.R;
+import com.hr.musicktv.base.BaseActivity;
+import com.hr.musicktv.ui.adapter.FunctionMenuAdapter;
+import com.hr.musicktv.utils.DisplayUtils;
 import com.hr.musicktv.utils.Formatter;
 import com.hr.musicktv.widget.layout.LoadingLayout;
+import com.hr.musicktv.widget.pop.CustomPopuWindConfig;
+import com.hr.musicktv.widget.pop.MusicSelectPopWindow;
 import com.hr.musicktv.widget.seek.TvSeekBarView;
+import com.owen.tvrecyclerview.widget.TvRecyclerView;
 
 import java.util.concurrent.TimeUnit;
 
@@ -48,6 +55,12 @@ public class MusicControlView extends BaseLayout implements MethodLayout , Loadi
     TvSeekBarView progress;
     @BindView(R.id.load_relayout)
     LoadingLayout load_relayout;
+    @BindView(R.id.control_main_layout)
+    RelativeLayout controlMainLayout;
+    @BindView(R.id.list_menu_one)
+    TvRecyclerView listMenuOne;
+
+    private FunctionMenuAdapter adapterLift;
 
     @OnClick({R.id.btn_pause,R.id.btn_rebroadcast,R.id.btn_next_song,R.id.btn_original_singer
     ,R.id.btn_accompany,R.id.btn_up_tune,R.id.btn_down_tune,R.id.btn_song_list})
@@ -96,7 +109,7 @@ public class MusicControlView extends BaseLayout implements MethodLayout , Loadi
                 if(null != methodView){
                     methodView.songList();
                 }
-                mainView.setVisibility(GONE);
+                controlMainLayout.setVisibility(GONE);
                 break;
         }
     }
@@ -121,7 +134,7 @@ public class MusicControlView extends BaseLayout implements MethodLayout , Loadi
 
     @Override
     public void start() {
-        if(mainView.getVisibility() == VISIBLE){
+        if(controlMainLayout.getVisibility() == VISIBLE){
             setUpDisposable();
             doSomething();
         }
@@ -136,8 +149,8 @@ public class MusicControlView extends BaseLayout implements MethodLayout , Loadi
     public void onPause() {
         dispose();
         disableUp();
-        if(mainView.getVisibility() == GONE)
-        mainView.setVisibility(VISIBLE);
+        if(controlMainLayout.getVisibility() == GONE)
+            controlMainLayout.setVisibility(VISIBLE);
     }
 
     @Override
@@ -174,8 +187,8 @@ public class MusicControlView extends BaseLayout implements MethodLayout , Loadi
 
         setLoadingLayout(0,0,null);
 
-        if(mainView.getVisibility() == VISIBLE){
-            mainView.setVisibility(GONE);
+        if(controlMainLayout.getVisibility() == VISIBLE){
+            controlMainLayout.setVisibility(GONE);
         }
     }
 
@@ -201,18 +214,27 @@ public class MusicControlView extends BaseLayout implements MethodLayout , Loadi
 
     @Override
     public void onMenu() {
-        mainView.setVisibility(VISIBLE);
+        controlMainLayout.setVisibility(VISIBLE);
         setUpDisposable();
     }
 
     @Override
-    public void onBack() {
-
+    public boolean onBack() {
+        if(listMenuOne.getVisibility() == VISIBLE){
+            listMenuOne.setVisibility(GONE);
+            return true;
+        }
+        return false;
     }
 
     @Override
     public void onKeyDown() {
         doSomething();
+    }
+
+    @Override
+    public void songList() {
+        showMusicSelectPopWindow();
     }
 
     @Override
@@ -226,8 +248,8 @@ public class MusicControlView extends BaseLayout implements MethodLayout , Loadi
      * 设置加载页面
      */
     public void setLoadingLayout(int type,int cas, LoadingLayout.ShowMain showMain) {
-        if(mainView.getVisibility() == GONE)
-            mainView.setVisibility(VISIBLE);
+        if(controlMainLayout.getVisibility() == GONE)
+            controlMainLayout.setVisibility(VISIBLE);
         switch (type){
             case 0://初次加载
                 load_relayout.setLoad_layout(android.R.color.transparent);//背景设置
@@ -251,6 +273,58 @@ public class MusicControlView extends BaseLayout implements MethodLayout , Loadi
         }
 
     }
+
+    /**
+     * 显示 功能菜单
+     */
+    private void showMusicSelectPopWindow(){
+
+        if(listMenuOne.getVisibility() == GONE){
+            listMenuOne.setVisibility(VISIBLE);
+        }
+        if(load_relayout.getVisibility() == VISIBLE){
+            load_relayout.setVisibility(GONE);
+        }
+        if(controlMainLayout.getVisibility() == VISIBLE){
+            controlMainLayout.setVisibility(GONE);
+        }
+
+
+        if(null == adapterLift){
+
+            adapterLift = new FunctionMenuAdapter(getContext());
+
+            listMenuOne.setSpacingWithMargins(DisplayUtils.getDimen(R.dimen.x10), 0);
+            listMenuOne.setAdapter(adapterLift);
+
+            listMenuOne.setOnItemListener(new TvRecyclerView.OnItemListener() {
+                @Override
+                public void onItemPreSelected(TvRecyclerView parent, View itemView, int position) {
+
+                }
+
+                @Override
+                public void onItemSelected(TvRecyclerView parent, View itemView, int position) {
+
+
+                }
+
+                @Override
+                public void onItemClick(TvRecyclerView parent, View itemView, int position) {
+
+                    if(null !=  methodView){
+                        methodView.select();
+                    }
+
+                }
+            });
+
+        }else {
+
+        }
+
+    }
+
 
     private void  setUpDisposable(){
 
@@ -311,8 +385,8 @@ public class MusicControlView extends BaseLayout implements MethodLayout , Loadi
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(@io.reactivex.annotations.NonNull Long aLong) throws Exception {
-                        if(mainView.getVisibility() == VISIBLE)
-                        mainView.setVisibility(GONE);
+                        if(controlMainLayout.getVisibility() == VISIBLE)
+                            controlMainLayout.setVisibility(GONE);
                         dispose();
                         disableUp();
                     }

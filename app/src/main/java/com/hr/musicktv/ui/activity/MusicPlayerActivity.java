@@ -71,7 +71,6 @@ public class MusicPlayerActivity extends BaseActivity {
         super.init();
 
         playId = getIntent().getStringExtra("PLAYID");
-        musicPlayer.setContextPlayer(this);
 
         musicPlayer.setUrlAndPlay(url);
 
@@ -199,13 +198,18 @@ public class MusicPlayerActivity extends BaseActivity {
             case KeyEvent.KEYCODE_BACK:    //返回键
 
                 if(event.getAction()==KeyEvent.ACTION_DOWN){
-                    if (System.currentTimeMillis()-firstTime>2000){
-                        Toast.makeText(MusicPlayerActivity.this,"再按一次退出播放器",Toast.LENGTH_SHORT).show();
-                        firstTime=System.currentTimeMillis();
-                    }else{
-                        finish();
+
+                    if(musicPlayer.onBack()){
+                        return true;
+                    }else {
+                        if (System.currentTimeMillis()-firstTime>2000){
+                            Toast.makeText(MusicPlayerActivity.this,"再按一次退出播放器",Toast.LENGTH_SHORT).show();
+                            firstTime=System.currentTimeMillis();
+                        }else{
+                            finish();
+                        }
+                        return true;
                     }
-                    return true;
                 }
 
                 break;

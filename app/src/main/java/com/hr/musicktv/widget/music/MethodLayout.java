@@ -21,6 +21,7 @@ public interface MethodLayout {
     void onCenter();//中心建
     void onMenu();//菜单键
     void onPause();//暂停
-    void onBack();//back
+    boolean onBack();//back
     void onKeyDown();
+    void songList();//歌单
 }

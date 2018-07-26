@@ -47,21 +47,14 @@ public class MusicPlayerLayout extends BaseLayout
     ,IMediaPlayer.OnSeekCompleteListener
     ,IMediaPlayer.OnTimedTextListener
     ,IMediaPlayer.OnVideoSizeChangedListener
-    ,MethodWhat,MethodView,MusicSelectPopWindow.MusicSelectMenuBack
+    ,MethodWhat,MethodView
 {
     private volatile String url = null;
     private SurfaceView surfaceView;
     private IjkMediaPlayer mediaPlayer;
     private MusicControlView musicControlView;
-    private MusicSelectPopWindow musicSelectPopWindow;
 
     private volatile boolean isCreated;
-
-    private BaseActivity contextPlayer;
-
-    public void setContextPlayer(BaseActivity contextPlayer) {
-        this.contextPlayer = contextPlayer;
-    }
 
     public MusicPlayerLayout(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -227,9 +220,9 @@ public class MusicPlayerLayout extends BaseLayout
 
     @Override
     public void songList() {
-
-        showMusicSelectPopWindow();
-
+        if(null != musicControlView){
+            musicControlView.songList();
+        }
     }
     @Override
     public void pause() {
@@ -290,12 +283,7 @@ public class MusicPlayerLayout extends BaseLayout
     }
 
     @Override
-    public void onItemSelected(int point, int select) {
-
-    }
-
-    @Override
-    public void isFunctionMenuDimss() {
+    public void select() {
 
     }
 
@@ -325,10 +313,12 @@ public class MusicPlayerLayout extends BaseLayout
     }
 
     @Override
-    public void onBack() {
+    public boolean onBack() {
         if(null != musicControlView){
-            musicControlView.onBack();
+         return    musicControlView.onBack();
         }
+
+        return false;
     }
 
     @Override
@@ -391,7 +381,7 @@ public class MusicPlayerLayout extends BaseLayout
             return mediaPlayer;
         }
 
-        setCache(url,false);
+        setCache(url,true);
 
         mediaPlayer.setDisplay(surfaceView.getHolder());
         mediaPlayer.setOnPreparedListener(this);
@@ -405,30 +395,4 @@ public class MusicPlayerLayout extends BaseLayout
         mediaPlayer.prepareAsync();
         return  mediaPlayer;
     }
-
-    /**
-     * 显示 功能菜单
-     */
-    private void showMusicSelectPopWindow(){
-
-        if(null == musicSelectPopWindow){
-            musicSelectPopWindow = new MusicSelectPopWindow(contextPlayer,new CustomPopuWindConfig
-                    .Builder(contextPlayer)
-                    .setOutSideTouchable(true)
-                    .setFocusable(true)
-                    .setAnimation(R.style.popup_hint_anim_two)
-                    .setHigh(DisplayUtils.getScreenHeight(getContext()))
-                    .setTouMing(true)
-                    .build());
-            musicSelectPopWindow.setFunctionMenuCallBack(this);
-
-            musicSelectPopWindow.show(this);
-
-        }else {
-            musicSelectPopWindow.show(this);
-        }
-
-    }
-
-
 }
