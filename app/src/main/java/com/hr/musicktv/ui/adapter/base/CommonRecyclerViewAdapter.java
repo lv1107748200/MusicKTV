@@ -29,6 +29,10 @@ public abstract class CommonRecyclerViewAdapter<T> extends RecyclerView.Adapter<
     public void clearDatas(){
         this.mDatas.clear();
     }
+    public void clearDatasAndNot(){
+        this.mDatas.clear();
+        notifyDataSetChanged();
+    }
     
     public void setDatas(List<T> datas){
         this.mDatas = datas;

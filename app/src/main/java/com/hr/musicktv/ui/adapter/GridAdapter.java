@@ -21,8 +21,6 @@ import android.content.Context;
 import com.hr.musicktv.R;
 
 
-import com.hr.musicktv.db.PHData;
-import com.hr.musicktv.net.entry.ListData;
 import com.hr.musicktv.net.entry.response.MKGetStarList;
 import com.hr.musicktv.net.entry.response.Result;
 import com.hr.musicktv.net.entry.response.WhatList;
@@ -80,10 +78,7 @@ public class GridAdapter extends CommonRecyclerViewAdapter {
                         .setText(R.id.title,((Result) item).getTitle());
 
         }else if(PLAYERRECORDLAYOUT == type) {
-            if(item instanceof PHData)
-                helper.getHolder()
-                        .showImage(R.id.image, UrlUtils.getUrl(((PHData) item).getImgPath()))
-                        .setText(R.id.title,((PHData) item).getTitle());
+
 
         } else{
             if(item instanceof WhatList){

@@ -1,7 +1,7 @@
 package com.hr.musicktv.widget.music;
 
 
-import tv.danmaku.ijk.media.player.IMediaPlayer;
+
 
 /*
  * lv   2018/7/25

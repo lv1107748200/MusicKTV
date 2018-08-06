@@ -9,7 +9,7 @@ import com.hr.musicktv.base.BaseApplation;
 
 import java.io.IOException;
 
-import tv.danmaku.ijk.media.player.IMediaPlayer;
+
 
 /*
  * lv   2018/7/24

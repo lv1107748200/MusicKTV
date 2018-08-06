@@ -30,6 +30,7 @@ import com.hr.musicktv.widget.dialog.LoadingDialog;
 import com.hr.musicktv.widget.keyboard.SkbContainer;
 import com.hr.musicktv.widget.keyboard.SoftKey;
 import com.hr.musicktv.widget.keyboard.SoftKeyBoardListener;
+import com.hr.musicktv.widget.layout.AddLineLayout;
 import com.owen.tvrecyclerview.widget.SimpleOnItemListener;
 import com.owen.tvrecyclerview.widget.TvRecyclerView;
 import com.trello.rxlifecycle2.android.ActivityEvent;
@@ -59,6 +60,8 @@ public class ClassifyListDataActicity extends BaseActivity implements AffPasWind
     EditText tv_show_message;
     @BindView(R.id.skb_layout)
     LinearLayout skb_layout;
+    @BindView(R.id.addLayout)
+    AddLineLayout addLayout;
 
     private boolean isMore = true;
     private boolean isLoadMore = false;
@@ -203,7 +206,7 @@ public class ClassifyListDataActicity extends BaseActivity implements AffPasWind
         if(CheckUtil.isEmpty(url))
             return;
         this.url = url;
-
+        addLayout.showClick();
         ComList();
     }
 
@@ -213,20 +216,25 @@ public class ClassifyListDataActicity extends BaseActivity implements AffPasWind
             @Override
             public void onError(HttpException e) {
                 if(e.getCode() == 1){
-                    NToast.shortToastBaseApp(e.getMsg());
+                    addLayout.hideAndShowMessage(e.getMsg());
                 }else {
-
+                    addLayout.hideClick();
                 }
-                LoadingDialog.disMiss();
+
+                addLayout.hideClick();
             }
 
             @Override
             public void onSuccess(BaseResponse<BaseDataResponse<MKGetStarList>> baseDataResponseBaseResponse) {
 
+                addLayout.hideClick();
+
                 List<MKGetStarList> mkGetStarLists = baseDataResponseBaseResponse.getData().getInfo();
 
                 if(!CheckUtil.isEmpty(mkGetStarLists)){
                     gridAdapter.repaceDatas(mkGetStarLists);
+                }else {
+                    addLayout.hideAndShowMessage(getString(R.string.mk_null_data));
                 }
 
             }

@@ -2,6 +2,7 @@ package com.hr.musicktv.widget.comparator;
 
 
 import com.hr.musicktv.common.BaseMusicData;
+import com.hr.musicktv.net.entry.response.MKSearch;
 
 import java.util.Comparator;
 

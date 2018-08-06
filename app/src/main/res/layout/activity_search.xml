@@ -79,7 +79,7 @@
 
         </LinearLayout>
 
-        <LinearLayout
+        <FrameLayout
             android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -91,12 +91,22 @@
                 android:id="@+id/tv_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                app:tv_selectedItemIsCentered="true"
                 style="@style/TwoWayView"
                 android:orientation="vertical"
                 app:spanCount="1"
                 app:tv_layoutManager="V7GridLayoutManager"/>
 
-        </LinearLayout>
+
+            <com.hr.musicktv.widget.layout.AddLineLayout
+                android:id="@+id/addLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="invisible"
+                >
+            </com.hr.musicktv.widget.layout.AddLineLayout>
+
+        </FrameLayout>
 
     </LinearLayout>
 

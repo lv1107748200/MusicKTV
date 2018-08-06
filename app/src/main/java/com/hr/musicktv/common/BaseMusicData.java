@@ -1,12 +1,18 @@
 package com.hr.musicktv.common;
 
 
+import com.raizlabs.android.dbflow.annotation.Column;
+import com.raizlabs.android.dbflow.structure.BaseModel;
+
+import java.io.Serializable;
+
 /*
  * lv   2018/7/23
  */
-public class BaseMusicData {
-
+public class BaseMusicData  extends BaseModel implements Serializable {
+    @Column
     private boolean isStick;//置顶
+    @Column
     private boolean isSel;
 
     public boolean isStick() {

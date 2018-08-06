@@ -1,6 +1,8 @@
 package com.hr.musicktv.widget.music;
 
 
+import com.hr.musicktv.net.entry.response.MKSearch;
+
 /*
  * lv   2018/7/25
  */
@@ -16,5 +18,6 @@ public interface MethodView {
     void songList();//歌单
     boolean getIsPlayer();//是否正在播放
     void vStart();//开始
-    void select();//选中那一集
+    void select(MKSearch mkSearch);//选中那一集
+    MKSearch  getMk();
 }

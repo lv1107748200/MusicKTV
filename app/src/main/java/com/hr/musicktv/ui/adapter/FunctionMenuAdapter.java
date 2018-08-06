@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.hr.musicktv.R;
 import com.hr.musicktv.net.entry.ItemBean;
+import com.hr.musicktv.net.entry.response.MKSearch;
 import com.hr.musicktv.ui.adapter.base.CommonRecyclerViewAdapter;
 import com.hr.musicktv.ui.adapter.base.CommonRecyclerViewHolder;
 
@@ -27,14 +28,10 @@ public class FunctionMenuAdapter extends CommonRecyclerViewAdapter {
 
     @Override
     public void onBindItemHolder(CommonRecyclerViewHolder helper, Object item, int position) {
+        if(item instanceof MKSearch) {
 
-
-            helper.getHolder().setText(R.id.title, position + "");
-
-    }
-
-    @Override
-    public int getItemCount() {
-        return 100;
+            final MKSearch listData = (MKSearch) item;
+            helper.getHolder().setText(R.id.title, listData.getTitle());
+        }
     }
 }

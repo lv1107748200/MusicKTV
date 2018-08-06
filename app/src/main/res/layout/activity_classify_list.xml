@@ -21,20 +21,33 @@
             app:tv_isMenu="true"
             app:tv_layoutManager="V7LinearLayoutManager"
             />
-        <com.owen.tvrecyclerview.widget.TvRecyclerView
-            android:layout_weight="1"
-            android:id="@+id/main_list"
-            android:paddingRight="@dimen/x40"
-            android:paddingLeft="@dimen/x40"
-            android:paddingBottom="@dimen/x40"
-            android:paddingTop="@dimen/x20"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:tv_selectedItemIsCentered="true"
-            android:orientation="vertical"
-            app:spanCount="3"
-            app:tv_layoutManager="V7GridLayoutManager"
-            />
+            android:layout_weight="1"
+            >
+            <com.owen.tvrecyclerview.widget.TvRecyclerView
+                android:id="@+id/main_list"
+                android:paddingRight="@dimen/x40"
+                android:paddingLeft="@dimen/x40"
+                android:paddingBottom="@dimen/x40"
+                android:paddingTop="@dimen/x20"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:tv_selectedItemIsCentered="true"
+                android:orientation="vertical"
+                app:spanCount="3"
+                app:tv_layoutManager="V7GridLayoutManager"
+                />
+            <com.hr.musicktv.widget.layout.AddLineLayout
+                android:visibility="invisible"
+                android:id="@+id/addLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            </com.hr.musicktv.widget.layout.AddLineLayout>
+
+        </FrameLayout>
+
 
         <LinearLayout
             android:id="@+id/skb_layout"

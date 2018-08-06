@@ -2,10 +2,15 @@ package com.hr.musicktv.widget.music;
 
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.res.AssetFileDescriptor;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.TimedText;
+import android.media.audiofx.Equalizer;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -20,21 +25,14 @@ import com.danikula.videocache.HttpProxyCacheServer;
 import com.hr.musicktv.R;
 import com.hr.musicktv.base.BaseActivity;
 import com.hr.musicktv.base.BaseApplation;
+import com.hr.musicktv.net.entry.response.MKSearch;
 import com.hr.musicktv.utils.CheckUtil;
-import com.hr.musicktv.utils.DisplayUtils;
 import com.hr.musicktv.utils.NLog;
-import com.hr.musicktv.widget.RawDataSourceProvider;
-import com.hr.musicktv.widget.pop.CustomPopuWindConfig;
-import com.hr.musicktv.widget.pop.FunctionMenuPopWindow;
-import com.hr.musicktv.widget.pop.MusicSelectPopWindow;
-import com.hr.mylibrary.utils.GSYVideoType;
+import com.hr.musicktv.utils.NToast;
+import com.hr.musicktv.widget.seek.CustomSeekbar;
 
 import java.io.IOException;
 
-import io.reactivex.disposables.Disposable;
-import tv.danmaku.ijk.media.player.IMediaPlayer;
-import tv.danmaku.ijk.media.player.IjkMediaPlayer;
-import tv.danmaku.ijk.media.player.IjkTimedText;
 
 /*
  * lv   2018/7/24
@@ -55,17 +53,25 @@ public class MusicPlayerLayout extends BaseLayout
     private SurfaceView surfaceView;
     private MediaPlayer mediaPlayer;
     private MusicControlView musicControlView;
+    private WheatManger wheatManger;
+    private BroadcastReceiver broadcastReceiver;
 
     private volatile boolean isCreated;
 
     private Context context;
+    private MethodMain methodMain;
 
-    public void setContext(Context context) {
-        this.context = context;
+    private Equalizer mEqualizer;//均衡器
+
+
+    public void setMethodMain(MethodMain methodMain) {
+        this.methodMain = methodMain;
     }
 
     public MusicPlayerLayout(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        this.context = context;
+        wheatManger = new WheatManger();
     }
 
     @Override
@@ -131,9 +137,23 @@ public class MusicPlayerLayout extends BaseLayout
 
     @Override
     public void onPrepared(MediaPlayer iMediaPlayer) {
+
+        if(mediaPlayer != null){
+            mediaPlayer.start();
+        }
+
         if(null != musicControlView){
             musicControlView.onPrepared();
         }
+
+        if(null != wheatManger){
+          //  wheatManger.start();
+        }
+
+        if(null != mediaPlayer){
+            mediaPlayer.setVolume(0.8f, 0.8f);
+        }
+
     }
 
     @Override
@@ -183,20 +203,18 @@ public class MusicPlayerLayout extends BaseLayout
     }
     @Override
     public void change() {//换集
+
         if(null != musicControlView){
             musicControlView.change();
         }
-
-            stop();
-            initMediaPlayer(url);//换集
+        pause();
     }
     @Override
     public void rebroadcast() {//重新播放
         if(null != musicControlView){
             musicControlView.rebroadcast();
         }
-
-        stop();
+        pause();
         initMediaPlayer(url);
     }
     @Override
@@ -211,6 +229,11 @@ public class MusicPlayerLayout extends BaseLayout
             mediaPlayer.release();//释放资源
         }
 
+        if(null != wheatManger){
+            wheatManger.release();
+        }
+
+       context.unregisterReceiver(broadcastReceiver);
     }
 
     @Override
@@ -249,25 +272,43 @@ public class MusicPlayerLayout extends BaseLayout
 
     @Override
     public void originalSinger() {//原唱
+
         if(null != mediaPlayer){
-            mediaPlayer.selectTrack(1);
+            if(canableChangeTrack()){
+                try{
+                    mediaPlayer.selectTrack(MediaPlayer.TrackInfo.MEDIA_TRACK_TYPE_VIDEO);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+            }else {
+                NToast.shortToastBaseApp("此资源不支持音轨切换");
+            }
         }
     }
 
     @Override
     public void accompany() {//半场
         if(null != mediaPlayer){
-            mediaPlayer.selectTrack(2);
+            if(canableChangeTrack()){
+                try{
+                    mediaPlayer.selectTrack(MediaPlayer.TrackInfo.MEDIA_TRACK_TYPE_AUDIO);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }else {
+                NToast.shortToastBaseApp("此资源不支持音轨切换");
+            }
         }
     }
 
     @Override
     public void tone(int is) {//升降调
-
+        setmEqualizer(is);
     }
     @Override
     public long getCurrentPosition() {
-        if(null != mediaPlayer){
+        if(null != mediaPlayer ){
             return mediaPlayer.getCurrentPosition();
         }
         return 0;
@@ -292,8 +333,18 @@ public class MusicPlayerLayout extends BaseLayout
     }
 
     @Override
-    public void select() {
+    public void select(MKSearch mkSearch) {
+        if(null != methodMain){
+            methodMain.change(mkSearch);
+        }
+    }
 
+    @Override
+    public MKSearch getMk() {
+        if(null != methodMain){
+          return   methodMain.getMK();
+        }
+        return null;
     }
 
     @Override
@@ -305,7 +356,7 @@ public class MusicPlayerLayout extends BaseLayout
 
         if(null != mediaPlayer){
             if(mediaPlayer.isPlaying()){
-                pause();
+               // pause();
             }else {
                // if(mediaPlayer.isPlayable()){
                     start();
@@ -337,23 +388,6 @@ public class MusicPlayerLayout extends BaseLayout
         }
     }
 
-
-    private void setCache(String url, boolean isCache){
-
-        if(isCache){
-            HttpProxyCacheServer proxy = BaseApplation.getProxy(getContext());
-            url = proxy.getProxyUrl(url);
-        }
-
-//        String path = "android.resource://" + getContext().getPackageName() + "/" + R.raw.ben_pao;
-//        mediaPlayer.setDataSource(RawDataSourceProvider.create(getContext(), Uri.parse(path)));
-
-//        try {
-//            mediaPlayer.setDataSource(url);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-    }
     public void setUrlAndPlay(String url) {
         this.url = url;
         if(isCreated){
@@ -368,118 +402,172 @@ public class MusicPlayerLayout extends BaseLayout
     public String getUrl() {
         return url;
     }
+    private void setCache(String url, boolean isCache){
 
+        if(isCache){
+            HttpProxyCacheServer proxy = BaseApplation.getProxy(getContext());
+            url = proxy.getProxyUrl(url);
+        }
+
+     //   String path = "android.resource://" + getContext().getPackageName() + "/" + R.raw.ben_pao;
+//        mediaPlayer.setDataSource(RawDataSourceProvider.create(getContext(), Uri.parse(path)));
+
+        try {
+
+            AssetFileDescriptor afd = context.getResources().openRawResourceFd(R.raw.ben_pao);
+            mediaPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+
+           //mediaPlayer.setDataSource(url);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
     public MediaPlayer initMediaPlayer(String url){
-//        if(null == mediaPlayer){
-//            mediaPlayer =  MediaPlayer.create(getContext(),R.raw.ben_pao);
-//        }else {
-//            mediaPlayer.reset();
-//        }
-
-        mediaPlayer =  MediaPlayer.create(context,R.raw.ben_pao);
-
-        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        //循环播放
-        // mediaPlayer.setLooping(true);
-        //屏幕常亮
-        mediaPlayer.setScreenOnWhilePlaying(true);
 
 
         if(CheckUtil.isEmpty(url)){
-
             return mediaPlayer;
         }
+        //MediaPlayer.create只要成功返回了播放器就不需要再去 prepare  否则报错 (源码中已经 执行了 prepare)
+        if(null == mediaPlayer){
 
-        setCache(url,false);
+           // mediaPlayer =  MediaPlayer.create(getContext(), Uri.parse(url));
 
-        mediaPlayer.setDisplay(surfaceView.getHolder());
-        mediaPlayer.setOnPreparedListener(this);
-        mediaPlayer.setOnCompletionListener(this);
-        mediaPlayer.setOnBufferingUpdateListener(this);
-        mediaPlayer.setOnSeekCompleteListener(this);
-        mediaPlayer.setOnVideoSizeChangedListener(this);
-        mediaPlayer.setOnErrorListener(this);
-        mediaPlayer.setOnInfoListener(this);
-        mediaPlayer.setOnTimedTextListener(this);
-        mediaPlayer.prepareAsync();
+            mediaPlayer = new MediaPlayer();
+
+
+            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            mediaPlayer.setScreenOnWhilePlaying(true);
+
+            mediaPlayer.setDisplay(surfaceView.getHolder());
+            setCache(url,true);
+
+            mediaPlayer.setOnPreparedListener(this);
+            mediaPlayer.setOnCompletionListener(this);
+            mediaPlayer.setOnBufferingUpdateListener(this);
+            mediaPlayer.setOnSeekCompleteListener(this);
+            mediaPlayer.setOnVideoSizeChangedListener(this);
+            mediaPlayer.setOnErrorListener(this);
+            mediaPlayer.setOnInfoListener(this);
+            mediaPlayer.setOnTimedTextListener(this);
+            mediaPlayer.setVolume(1.0f, 1.0f);
+            mediaPlayer.setAuxEffectSendLevel(1.0f);
+
+            if(null == mEqualizer){
+                mEqualizer = new Equalizer(0, mediaPlayer.getAudioSessionId());
+                mEqualizer.setEnabled(true);
+            }
+
+            mediaPlayer.prepareAsync();
+
+            //start();
+
+        }else {
+            mediaPlayer.reset();
+
+            setCache(url,true);
+
+            mediaPlayer.prepareAsync();
+        }
+        //循环播放
+        // mediaPlayer.setLooping(true);
+        //屏幕常亮
+
         return  mediaPlayer;
     }
 
 
+    private boolean  canableChangeTrack(){
+
+        if(null != mediaPlayer){
+            MediaPlayer.TrackInfo[] trackInfos =   mediaPlayer.getTrackInfo();
+            if(!CheckUtil.isEmpty(trackInfos) && url.indexOf("mkv")!=-1){
+                return true;
+            }
+        }
+        MediaPlayer.TrackInfo[] trackInfos =   mediaPlayer.getTrackInfo();
 
 
-//    private void setCache(String url, boolean isCache){
-//
-//        if(isCache){
-//            HttpProxyCacheServer proxy = BaseApplation.getProxy(getContext());
-//            url = proxy.getProxyUrl(url);
-//        }
-//
-////        String path = "android.resource://" + getContext().getPackageName() + "/" + R.raw.ben_pao;
-////        mediaPlayer.setDataSource(RawDataSourceProvider.create(getContext(), Uri.parse(path)));
-//
-////        try {
-////            mediaPlayer.setDataSource(url);
-////        } catch (IOException e) {
-////            e.printStackTrace();
-////        }
-//    }
-//    public void setUrlAndPlay(String url) {
-//        this.url = url;
-//        if(isCreated){
-//            initMediaPlayer(url);
-//        }
-//    }
-//
-//    public void setUrl(String url) {
-//        this.url = url;
-//    }
-//
-//    public String getUrl() {
-//        return url;
-//    }
-//
-//    public IjkMediaPlayer initMediaPlayer(String url){
-//        if(null == mediaPlayer){
-//            mediaPlayer = new IjkMediaPlayer();
-//        }else {
-//            mediaPlayer.reset();
-//        }
-//        mediaPlayer.native_setLogLevel(IjkMediaPlayer.IJK_LOG_DEBUG);
-//        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-//        //循环播放
-//        // mediaPlayer.setLooping(true);
-//        //SeekTo的时候，会跳回到拖动前的位置
-//        mediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "enable-accurate-seek", 1);
-//        //屏幕常亮
-//        mediaPlayer.setScreenOnWhilePlaying(true);
-//
-//        //开启硬解码
-//        if (false) {
-//            mediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec", 1);
-//            mediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec-auto-rotate", 1);
-//            mediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec-handle-resolution-change", 1);
-//        }
-//
-//        if(CheckUtil.isEmpty(url)){
-//
-//            return mediaPlayer;
-//        }
-//
-//        setCache(url,false);
-//
-//        mediaPlayer.selectTrack(2);
-//
-//        mediaPlayer.setDisplay(surfaceView.getHolder());
-//        mediaPlayer.setOnPreparedListener(this);
-//        mediaPlayer.setOnCompletionListener(this);
-//        mediaPlayer.setOnBufferingUpdateListener(this);
-//        mediaPlayer.setOnSeekCompleteListener(this);
-//        mediaPlayer.setOnVideoSizeChangedListener(this);
-//        mediaPlayer.setOnErrorListener(this);
-//        mediaPlayer.setOnInfoListener(this);
-//        mediaPlayer.setOnTimedTextListener(this);
-//        mediaPlayer.prepareAsync();
-//        return  mediaPlayer;
-//    }
+        NLog.e(NLog.PLAYER,"--->size = " + trackInfos.length);
+
+        for (int i = 0, j = trackInfos.length; i<j; i++){
+            NLog.e(NLog.PLAYER,"--->trackInfos = " +  trackInfos[i].toString());
+        }
+        return true;
+    }
+
+
+    private void setmEqualizer(int is){
+        if(null == mEqualizer)
+            return;
+
+        final short lowerEqualizerBandLevel = mEqualizer.getBandLevelRange()[0];
+        final short upperEqualizerBandLevel = mEqualizer.getBandLevelRange()[1];
+
+        // 获取均衡控制器支持的所有频率
+        short brands = mEqualizer.getNumberOfBands();
+
+        NLog.e(NLog.PLAYER," 均衡器  --->size = " + brands);
+        NLog.e(NLog.PLAYER," 均衡器  --->lowerEqualizerBandLevel = " + lowerEqualizerBandLevel);
+        NLog.e(NLog.PLAYER," 均衡器  --->upperEqualizerBandLevel = " + upperEqualizerBandLevel);
+
+        short  main = (short) (upperEqualizerBandLevel - lowerEqualizerBandLevel);
+        short  what = 1500;
+        if(null != musicControlView){
+
+            CustomSeekbar customSeekbar =  musicControlView.getEqSeeBar();
+
+               what = (short) (main/ customSeekbar.getJianJv());
+
+            if(is == 0){//升
+                customSeekbar.setProgress(customSeekbar.getCur_sections() + 1);
+
+            }else if(is == 1){//降
+                customSeekbar.setProgress(customSeekbar.getCur_sections() - 1);
+            }
+
+            what = (short) (what * customSeekbar.getCur_sections());
+        }
+
+        if(what < 0 ){
+            what = 1500;
+        }
+
+        for(short i=0; i<brands; i++){
+            short zu = (short) (what+lowerEqualizerBandLevel);
+            NLog.e(NLog.PLAYER," 均衡器  --->zu = " + zu);
+            mEqualizer.setBandLevel(i, zu);
+            NLog.e(NLog.PLAYER," 均衡器  --->BandLevel = " + mEqualizer.getBandLevel(i));
+        }
+    }
+
+    public void setBroadcastReceiver() {
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String action = intent.getAction();
+                switch (action){
+                    //插入和拔出耳机会触发此广播
+                    case Intent.ACTION_HEADSET_PLUG:
+                        int state = intent.getIntExtra("state", 0);
+                        if (state == 1){
+                            NToast.shortToastBaseApp("插入耳机");
+
+                            if(null != wheatManger){
+                                wheatManger.changeToSpeaker();
+                            }
+
+                        } else if (state == 0){
+                            NToast.shortToastBaseApp("耳机未插");
+                        }
+                        break;
+                }
+            }
+        };
+        IntentFilter intentFilter =   new IntentFilter();
+        intentFilter.addAction(Intent.ACTION_HEADSET_PLUG);
+
+      context.registerReceiver(broadcastReceiver,intentFilter);
+    }
 }

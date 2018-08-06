@@ -194,5 +194,17 @@
         android:visibility="gone"
         />
 
+    <com.hr.musicktv.widget.seek.CustomSeekbar
+        android:focusable="false"
+        android:id="@+id/EqSeeBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/x222"
+        android:layout_marginLeft="@dimen/x222"
+        android:layout_centerVertical="true"
+        android:visibility="gone"
+        />
+
+
 
 </RelativeLayout>

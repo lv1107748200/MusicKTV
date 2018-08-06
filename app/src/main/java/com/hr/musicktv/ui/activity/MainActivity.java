@@ -12,7 +12,6 @@ import android.widget.Toast;
 import com.hr.musicktv.R;
 import com.hr.musicktv.base.BaseActivity;
 import com.hr.musicktv.base.BaseFragment;
-import com.hr.musicktv.db.RealmDBManger;
 import com.hr.musicktv.net.base.BaseDataResponse;
 import com.hr.musicktv.net.base.BaseResponse;
 import com.hr.musicktv.net.entry.request.MKSearch;
@@ -238,7 +237,6 @@ public class MainActivity extends BaseActivity implements BaseFragment.FocusBord
     protected void onDestroy() {
         super.onDestroy();
         dispose();
-        RealmDBManger.closed();
     }
 
     protected void getTimesPosable() {

@@ -6,9 +6,8 @@ import android.content.Context;
 import android.support.multidex.MultiDex;
 
 import com.danikula.videocache.HttpProxyCacheServer;
-
-import io.realm.Realm;
-import io.realm.RealmConfiguration;
+import com.raizlabs.android.dbflow.config.FlowConfig;
+import com.raizlabs.android.dbflow.config.FlowManager;
 
 
 /**
@@ -32,11 +31,9 @@ public class BaseApplation extends Application  {
         mAppComponent = DaggerAppComponent.create();
 
         if (getApplicationInfo().packageName.equals(getCurProcessName(getApplicationContext()))) {
-            setInitRealm();
+
         }
-
-
-
+        FlowManager.init(new FlowConfig.Builder(this).build());
     }
 
     public static BaseApplation getBaseApp() {
@@ -56,14 +53,6 @@ public class BaseApplation extends Application  {
             }
         }
         return null;
-    }
-    private void setInitRealm(){
-        Realm.init(this);
-        RealmConfiguration myConfig = new RealmConfiguration.Builder()
-                .name("vpt.realm")
-                .schemaVersion(2)
-                .build();
-        Realm.setDefaultConfiguration(myConfig);
     }
 
 

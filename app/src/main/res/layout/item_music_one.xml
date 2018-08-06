@@ -5,6 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/x80"
     android:background="@color/c_96a80"
+    android:focusable="true"
+    android:clickable="true"
+    android:id="@+id/layout_select"
     >
     <TextView
         android:duplicateParentState="true"
@@ -23,7 +26,8 @@
     <Button
         android:id="@+id/btn_song"
         android:text="@string/mk_song"
-        style="@style/music_btn_one" />
+        style="@style/music_btn_one"
+        />
     <Button
         android:id="@+id/btn_stick"
         android:text="@string/mk_stick"

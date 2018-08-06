@@ -8,7 +8,37 @@
         android:id="@+id/load_relayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="gone"
         >
     </com.hr.musicktv.widget.layout.LoadingLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        >
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="开始"
+            android:id="@+id/btn_kaishi"
+            android:onClick="onClick"
+            />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="停止"
+            android:id="@+id/btn_stop"
+            android:onClick="onClick"
+            />
+    </LinearLayout>
+
+    <com.hr.musicktv.widget.layout.AddLineLayout
+        android:visibility="gone"
+        android:id="@+id/addLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </com.hr.musicktv.widget.layout.AddLineLayout>
 
 </FrameLayout>

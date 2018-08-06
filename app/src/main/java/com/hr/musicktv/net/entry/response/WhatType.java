@@ -3,15 +3,14 @@ package com.hr.musicktv.net.entry.response;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import io.realm.RealmModel;
-import io.realm.annotations.RealmClass;
+
 
 
 /**
  * lv
  */
-@RealmClass
-public class WhatType implements RealmModel {
+
+public class WhatType   {
 
     /**
      * PID : 0,1,3

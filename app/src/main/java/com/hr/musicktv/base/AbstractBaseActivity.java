@@ -42,7 +42,7 @@ public abstract class AbstractBaseActivity extends FragmentActivity implements L
     private static final  int PERMISSION_CODES = 1801;
     private boolean permissionGranted = true;
 
-
+    public  PermissionCallback permissionCallback;
     //群组请求
     public void setPermission(){
         String[] mPermissionList = new String[]{
@@ -75,7 +75,14 @@ public abstract class AbstractBaseActivity extends FragmentActivity implements L
     }
 
     //单个请求
-
+    public void requestPermission(String permission, PermissionCallback callback) {
+        permissionCallback = callback;
+        if (checkPermission(permission)) {
+            permissionCallback.requestP(true);
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{permission}, CODE);
+        }
+    }
     public boolean checkPermission(String permission) {
         if (ContextCompat.checkSelfPermission(getApplicationContext(),
                 permission)
@@ -88,6 +95,17 @@ public abstract class AbstractBaseActivity extends FragmentActivity implements L
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
+            case CODE: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (permissionCallback != null)
+                        permissionCallback.requestP(true);
+                } else {
+                    if (permissionCallback != null)
+                        permissionCallback.requestP(false);
+                }
+                return;
+            }
             case PERMISSION_CODES:
                 if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED){
                     permissionGranted = false;

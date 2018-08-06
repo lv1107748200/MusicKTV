@@ -1,36 +1,27 @@
 package com.hr.musicktv.db;
 
-import com.hr.musicktv.net.entry.response.WhatType;
 
+import com.hr.musicktv.net.entry.response.MKSearch;
+import com.hr.musicktv.net.entry.response.MKSearch_Table;
+import com.raizlabs.android.dbflow.annotation.OneToMany;
+import com.raizlabs.android.dbflow.annotation.PrimaryKey;
+import com.raizlabs.android.dbflow.annotation.Table;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
+import com.raizlabs.android.dbflow.structure.BaseModel;
 
-
-import java.util.ArrayList;
 import java.util.List;
-
-import io.realm.RealmList;
-import io.realm.RealmModel;
-import io.realm.annotations.PrimaryKey;
-import io.realm.annotations.RealmClass;
 
 /*
  *
  * lv   2018/7/9
  */
-@RealmClass
-public class TabsData implements RealmModel {
-
+@Table(database = AppDatabase.class)
+public class TabsData extends BaseModel{
     @PrimaryKey
     private String tab;
 
-    private RealmList<WhatType> realmList ;
+    private List<MKSearch> mkSearchList;
 
-    public RealmList<WhatType> getRealmList() {
-        return realmList;
-    }
-
-    public void setRealmList(RealmList<WhatType> realmList) {
-        this.realmList = realmList;
-    }
 
     public String getTab() {
         return tab;
@@ -40,4 +31,18 @@ public class TabsData implements RealmModel {
         this.tab = tab;
     }
 
+    @OneToMany(methods = {OneToMany.Method.ALL}, variableName = "mkSearchList")
+    public List<MKSearch> getMkSearchList() {
+        if (mkSearchList == null || mkSearchList.isEmpty()) {
+            mkSearchList = SQLite.select()
+                    .from(MKSearch.class)
+                    .where(MKSearch_Table.whatType.eq(tab))
+                    .queryList();
+        }
+        return mkSearchList;
+    }
+
+    public void setMkSearchList(List<MKSearch> mkSearchList) {
+        this.mkSearchList = mkSearchList;
+    }
 }

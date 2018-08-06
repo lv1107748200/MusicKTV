@@ -1,27 +1,37 @@
 package com.hr.musicktv.ui.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.media.AudioManager;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Toast;
 
 import com.hr.musicktv.R;
 import com.hr.musicktv.base.BaseActivity;
+import com.hr.musicktv.base.BaseApplation;
+import com.hr.musicktv.db.UseMusic;
 import com.hr.musicktv.net.base.BaseDataResponse;
 import com.hr.musicktv.net.base.BaseResponse;
 import com.hr.musicktv.net.entry.request.WhatCom;
 import com.hr.musicktv.net.entry.response.Detail;
-import com.hr.musicktv.net.entry.response.UserToken;
+import com.hr.musicktv.net.entry.response.MKSearch;
 import com.hr.musicktv.net.entry.response.VL;
 import com.hr.musicktv.net.entry.response.VipSeries;
 import com.hr.musicktv.net.http.HttpCallback;
 import com.hr.musicktv.net.http.HttpException;
 import com.hr.musicktv.utils.CheckUtil;
+import com.hr.musicktv.utils.DateUtils;
+import com.hr.musicktv.utils.JsonMananger;
 import com.hr.musicktv.utils.NLog;
 import com.hr.musicktv.utils.NToast;
 import com.hr.musicktv.utils.UrlUtils;
+import com.hr.musicktv.widget.broadcast.BroadcastManager;
 import com.hr.musicktv.widget.dialog.LoadingDialog;
+import com.hr.musicktv.widget.music.MethodMain;
 import com.hr.musicktv.widget.music.MusicPlayerLayout;
-import com.hr.musicktv.widget.single.UserInfoManger;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.io.UnsupportedEncodingException;
@@ -34,7 +44,7 @@ import butterknife.OnClick;
 /**
  * 播放页
  */
-public class MusicPlayerActivity extends BaseActivity {
+public class MusicPlayerActivity extends BaseActivity implements MethodMain {
 
     private boolean shortPress = false;
    // private String url = "rtmp://live.hkstv.hk.lxdns.com/live/hks";
@@ -43,7 +53,10 @@ public class MusicPlayerActivity extends BaseActivity {
     private long firstTime=0;
 
     private String playId;
+    private MKSearch playMk;
     private Detail detail;
+
+
 
     @BindView(R.id.music_player)
     MusicPlayerLayout musicPlayer;
@@ -71,32 +84,61 @@ public class MusicPlayerActivity extends BaseActivity {
     public void init() {
         super.init();
 
-        playId = getIntent().getStringExtra("PLAYID");
-        musicPlayer.setContext(this);
+        playMk = (MKSearch) getIntent().getSerializableExtra("PLAY");
+
+        musicPlayer.setBroadcastReceiver();
+        musicPlayer.setMethodMain(this);
+
+        if(null != playMk){
+            playId = String.valueOf(playMk.getID());
+            Play();
+            baoCUn(playMk);
+        }
 
         musicPlayer.setUrlAndPlay(url);
 
     }
 
-    private void huoqv(){
+
+    @Override
+    public void change(MKSearch mkSearch) {
+        if(null != mkSearch){
+            playMk = mkSearch;
+            baoCUn(playMk);
+            playId = String.valueOf(playMk.getID());
+            Play();
+            musicPlayer.setUrlAndPlay(url);
+
+        }else {
+            NToast.shortToastBaseApp("请点歌");
+
+            musicPlayer.setUrlAndPlay(url);
+        }
 
     }
 
+    @Override
+    public MKSearch getMK() {
+        return playMk;
+    }
 
-
+    private void baoCUn(MKSearch mkSearch){
+        if(null != mkSearch){
+            UseMusic useMusic = JsonMananger.jsonToBean(JsonMananger.beanToJson(mkSearch),UseMusic.class);
+            useMusic.setStick(false);
+            useMusic.setTimestamp(DateUtils.getStringTodayl());
+            useMusic.save();
+        }
+    }
     //获取影片播放地址
     private void Play(){
-        UserToken userToken = UserInfoManger.getInstance().getUserToken();
-        if(null == userToken){
-            return;
-        }
         WhatCom whatCom = new WhatCom(
-                UserInfoManger.getInstance().getToken(),
                 null,
-                userToken.getUID(),
-                userToken.getGID(),
-                userToken.getSign(),
-                userToken.getExpire()
+                null,
+                null,
+               null,
+                null,
+                null
         );
         if(!CheckUtil.isEmpty(playId)){
             whatCom.setID(playId);
@@ -146,7 +188,6 @@ public class MusicPlayerActivity extends BaseActivity {
         },MusicPlayerActivity.this.bindUntilEvent(ActivityEvent.DESTROY));
     }
 
-
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
 
@@ -157,8 +198,6 @@ public class MusicPlayerActivity extends BaseActivity {
                 if(shortPress){
 
                 }else {
-
-
 
                 }
 
@@ -177,15 +216,13 @@ public class MusicPlayerActivity extends BaseActivity {
                 return true;
         }
 
-
-
         return super.onKeyUp(keyCode, event);
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
-        //    NLog.d(NLog.TAGOther,"keyCode--->" + keyCode);
+            NLog.d(NLog.TAGOther,"keyCode--->" + keyCode);
         musicPlayer.onKeyDown();
 
         switch (keyCode) {
@@ -299,6 +336,8 @@ public class MusicPlayerActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         musicPlayer.release();
+
     }
+
 
 }

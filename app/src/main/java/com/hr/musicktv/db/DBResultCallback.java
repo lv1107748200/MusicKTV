@@ -29,8 +29,8 @@ public abstract class DBResultCallback<T> {
     public abstract void onError(String errString);
 
 
-    public void onFail(final String errString) {
-        RealmDBManger.getMainHandler().post(new Runnable() {
+    public void onFailCallback(final String errString) {
+        DBManger.getMainHandler().post(new Runnable() {
             @Override
             public void run() {
                 onError(errString);
@@ -38,8 +38,8 @@ public abstract class DBResultCallback<T> {
         });
     }
 
-    public void onCallback(final T t) {
-        RealmDBManger.getMainHandler().post(new Runnable() {
+    public void onSuccessCallback(final T t) {
+        DBManger.getMainHandler().post(new Runnable() {
             @Override
             public void run() {
                 onSuccess(t);

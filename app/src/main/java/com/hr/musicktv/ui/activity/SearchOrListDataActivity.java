@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.RectF;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -25,6 +26,7 @@ import com.hr.musicktv.ui.adapter.MusicSelectAdapter;
 import com.hr.musicktv.ui.adapter.base.CommonRecyclerViewHolder;
 import com.hr.musicktv.utils.CheckUtil;
 import com.hr.musicktv.utils.DisplayUtils;
+import com.hr.musicktv.utils.FocusUtil;
 import com.hr.musicktv.utils.NLog;
 import com.hr.musicktv.utils.NToast;
 import com.hr.musicktv.utils.StringUtils;
@@ -33,6 +35,8 @@ import com.hr.musicktv.widget.dialog.LoadingDialog;
 import com.hr.musicktv.widget.keyboard.SkbContainer;
 import com.hr.musicktv.widget.keyboard.SoftKey;
 import com.hr.musicktv.widget.keyboard.SoftKeyBoardListener;
+import com.hr.musicktv.widget.layout.AddLineLayout;
+import com.hr.musicktv.widget.loading.LVCircularJump;
 import com.hr.musicktv.widget.single.UserInfoManger;
 import com.owen.tvrecyclerview.widget.SimpleOnItemListener;
 import com.owen.tvrecyclerview.widget.TvRecyclerView;
@@ -60,7 +64,8 @@ public class SearchOrListDataActivity extends BaseActivity implements AffPasWind
     SkbContainer skbContainer;
     @BindView(R.id.tv_list)
     TvRecyclerView tvList;
-
+    @BindView(R.id.addLayout)
+    AddLineLayout addLayout;
 
     private AffPasWindow affPasWindow;
     private MusicSelectAdapter musicSelectAdapter;
@@ -74,6 +79,11 @@ public class SearchOrListDataActivity extends BaseActivity implements AffPasWind
     private String Tags;
     private String type;
     private com.hr.musicktv.net.entry.request.MKSearch mkSearch;
+
+
+    private boolean isTure = false;
+    private int id = -1;
+
     @Override
     public int getLayout() {
         return R.layout.activity_search;
@@ -209,7 +219,14 @@ public class SearchOrListDataActivity extends BaseActivity implements AffPasWind
 
             @Override
             public void onItemSelected(TvRecyclerView parent, View itemView, int position) {
-                onMoveFocusBorder(itemView, 1.1f, DisplayUtils.dip2px(3));
+               // onMoveFocusBorder(itemView, 1.1f, DisplayUtils.dip2px(3));
+               // NLog.e(NLog.TAGOther,"焦点 onItemSelected ---> id =  " + id);
+                if(isInclude()){
+                    FocusUtil.setFocus(itemView.findViewById(id));
+                }else {
+                    FocusUtil.setFocus(itemView.findViewById(R.id.btn_song));
+                }
+
             }
 
             @Override
@@ -245,12 +262,32 @@ public class SearchOrListDataActivity extends BaseActivity implements AffPasWind
                 return isMore; //是否还有更多数据
             }
         });
+
+
+        tvList.getViewTreeObserver().addOnGlobalFocusChangeListener(new ViewTreeObserver.OnGlobalFocusChangeListener() {
+            @Override
+            public void onGlobalFocusChanged(View oldFocus, View newFocus) {
+//                if(oldFocus != null){
+//                    NLog.e(NLog.TAGOther,"焦点 oldFocus id ---"+ oldFocus.getId());
+//                }
+//                if(newFocus != null){
+//                    NLog.e(NLog.TAGOther,"焦点 newFocus id ---"+ newFocus.getId());
+//                }
+                if(isTure){
+                    isTure = false;
+                    if(null != newFocus){
+                        id = newFocus.getId();
+                    }
+                }
+            }
+        });
     }
 
     private void load(String T){
 
 //        if(CheckUtil.isEmpty(T))
 //            return;
+        addLayout.showClick();
 
         Tags = T;
 
@@ -261,18 +298,21 @@ public class SearchOrListDataActivity extends BaseActivity implements AffPasWind
         if(null == mkSearch)
             return;
 
+        setlvcJump(true);
+
         mkSearch.setTitle(Tags);
 
 
         baseService.Search(mkSearch, new HttpCallback<BaseResponse<BaseDataResponse<MKSearch>>>() {
             @Override
             public void onError(HttpException e) {
+                setlvcJump(false);
                 if(e.getCode() == 1){
-                    NToast.shortToastBaseApp(e.getMsg());
+                    addLayout.hideAndShowMessage(e.getMsg());
                 }else {
-
+                    addLayout.hideClick();
                 }
-                LoadingDialog.disMiss();
+
                 if(isLoadMore){
                     tvList.setLoadingMore(false);
                 }
@@ -281,14 +321,27 @@ public class SearchOrListDataActivity extends BaseActivity implements AffPasWind
             @Override
             public void onSuccess(BaseResponse<BaseDataResponse<MKSearch>> baseDataResponseBaseResponse) {
 
+                addLayout.hideClick();
+
+                setlvcJump(false);
                 List<MKSearch>  whatLists = baseDataResponseBaseResponse.getData().getInfo();
 
                 if(!CheckUtil.isEmpty(whatLists)){
                     musicSelectAdapter.repaceDatas(whatLists);
+                }else {
+                    addLayout.hideAndShowMessage(getString(R.string.mk_null_data));
                 }
 
             }
         },SearchOrListDataActivity.this.bindUntilEvent(ActivityEvent.STOP));
+    }
+
+    private void setlvcJump(boolean isLoad){
+        if(isLoad){
+
+        }else {
+
+        }
     }
 
     private void setTvList(List<MKSearch>  whatLists){
@@ -375,10 +428,40 @@ public class SearchOrListDataActivity extends BaseActivity implements AffPasWind
 
     SoftKey mOldSoftKey;
 
+
+    private boolean isInclude(){
+
+        int ID[] = {R.id.btn_song,R.id.btn_del,R.id.btn_down,R.id.btn_stick,R.id.btn_sel,R.id.btn_up};
+
+        for(int i=0; i<ID.length; i++){
+            if(ID[i] == id){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (skbContainer.onSoftKeyDown(keyCode, event))
             return true;
+
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_DPAD_LEFT:
+            case KeyEvent.KEYCODE_DPAD_RIGHT:
+
+               // NLog.e(NLog.TAGOther,"按下左右 --->");
+                isTure = true;
+
+                break;
+            case KeyEvent.KEYCODE_DPAD_UP:
+            case KeyEvent.KEYCODE_DPAD_DOWN:
+
+               // NLog.e(NLog.TAGOther,"按下上下 --->");
+
+                break;
+        }
 
         return super.onKeyDown(keyCode, event);
     }

@@ -2,6 +2,10 @@ package com.hr.musicktv.common;
 
 public class ImmobilizationData {
 
+    public static final String SelSong = "已点";
+    public static final String UseSong = "已唱";
+    public static final String TAB = "tab";
+
     public static final String StarCLASSIFY = "歌手分类";
     public static final String LanCLASSIFY = "语种分类";
     public static final String StyleCLASSIFY = "曲风分类";
