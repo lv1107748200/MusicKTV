@@ -78,7 +78,6 @@ public class AddLineLayout extends LinearLayout{
             tvMessage.startAnimation(AnimationUtils.loadAnimation(getContext(),android.R.anim.fade_in));
             tvMessage.setVisibility(VISIBLE);
         }
-
     }
 
 }
