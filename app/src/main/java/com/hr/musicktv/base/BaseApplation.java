@@ -6,8 +6,12 @@ import android.content.Context;
 import android.support.multidex.MultiDex;
 
 import com.danikula.videocache.HttpProxyCacheServer;
+import com.facebook.stetho.Stetho;
+import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.raizlabs.android.dbflow.config.FlowConfig;
 import com.raizlabs.android.dbflow.config.FlowManager;
+
+import okhttp3.OkHttpClient;
 
 
 /**
@@ -29,6 +33,11 @@ public class BaseApplation extends Application  {
         super.onCreate();
         baseApp = this;
         mAppComponent = DaggerAppComponent.create();
+
+        Stetho.initializeWithDefaults(this);
+//        new OkHttpClient.Builder()
+//                .addNetworkInterceptor(new StethoInterceptor())
+//                .build();
 
         if (getApplicationInfo().packageName.equals(getCurProcessName(getApplicationContext()))) {
 

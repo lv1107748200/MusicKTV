@@ -68,19 +68,15 @@ bg_res="@drawable/main_bg"
             key_label="9"
             />
         <key
-            key_label="0"
-            />
-
-        <key
             key_code="@string/keycode_full_keyboard"
             key_label="@string/svp_full_keyboard"
-            key_width="@dimen/x222"
+            key_width="@dimen/x269"
             />
         <!-- 删除  key_left_padding="@dimen/x410"-->
         <key
             key_code="@string/keycode_T9"
             key_label="@string/svp_T9"
-            key_width="@dimen/x222"
+            key_width="@dimen/x270"
             />
     </row>
 
