@@ -60,6 +60,9 @@ public class AddLineLayout extends LinearLayout{
             bufferingIndicator.smoothToShow();
             tvMessage.setVisibility(INVISIBLE);
             setVisibility(VISIBLE);
+        }else {
+            bufferingIndicator.smoothToShow();
+            tvMessage.setVisibility(INVISIBLE);
         }
 
     }
